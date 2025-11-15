@@ -9,6 +9,7 @@ import com.ThaumiumAE2.api.ITAE2EssentiaStack;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.NotNull;
+import thaumcraft.api.aspects.Aspect;
 
 import java.io.IOException;
 
@@ -16,16 +17,21 @@ import java.io.IOException;
 /**
  * @author BrockWS
  */
-public class TAE2AspectStack implements ITAE2EssentiaStack, Comparable<TAE2AspectStack> {
+public class TAE2EssentiaStack implements ITAE2EssentiaStack, Comparable<TAE2EssentiaStack> {
 
     @Override
-    public int compareTo(@NotNull TAE2AspectStack o) {
+    public int compareTo(@NotNull TAE2EssentiaStack o) {
         return 0;
     }
 
     @Override
     public void add(ITAE2EssentiaStack option) {
 
+    }
+
+    @Override
+    public Aspect getAspect() {
+        return Aspect.AIR;
     }
 
     @Override

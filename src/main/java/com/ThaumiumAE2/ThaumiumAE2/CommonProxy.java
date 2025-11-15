@@ -17,7 +17,7 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-        AEApi.instance().registries().cell().addCellHandler(new ItemThaumiumCell());
+//        AEApi.instance().registries().cell().addCellHandler(new ItemThaumiumCell());
     }
 
     public void postInit(FMLPostInitializationEvent event) {}

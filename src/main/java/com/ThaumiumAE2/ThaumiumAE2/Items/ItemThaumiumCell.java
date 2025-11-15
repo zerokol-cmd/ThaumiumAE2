@@ -1,20 +1,31 @@
 package com.ThaumiumAE2.ThaumiumAE2.Items;
 
-import appeng.api.implementations.tiles.IChestOrDrive;
 import appeng.api.AEApi;
+import appeng.api.implementations.tiles.IChestOrDrive;
 import appeng.api.storage.*;
+import appeng.block.storage.BlockDrive;
+import com.ThaumiumAE2.ThaumiumAE2.TAE2;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class ItemThaumiumCell extends Item implements ICellHandler {
-    public ItemThaumiumCell() {
-        AEApi.instance().registries().cell().addCellHandler(this);
+import static appeng.core.features.AEFeature.MEDrive;
 
-        this.setMaxStackSize(1);
-        this.setMaxDamage(0);
-        this.setHasSubtypes(true);
+public class ItemThaumiumCell extends Item implements ICellHandler {
+	 private long bytesCapacity;
+	 private long typesCapacity;
+     public final static String ID = "thaumium_cell";
+
+    public ItemThaumiumCell(long bytesCapacity, long typesCapacity) {
+        this.bytesCapacity = bytesCapacity;
+        this.typesCapacity = typesCapacity;
+
+		this.setMaxStackSize(1);
+		this.setMaxDamage(0);
+		this.setHasSubtypes(false);
+		
+		AEApi.instance().registries().cell().addCellHandler(this);
     }
 
     @Override
@@ -23,12 +34,12 @@ public class ItemThaumiumCell extends Item implements ICellHandler {
     }
 
     @Override
-    public IMEInventoryHandler getCellInventory(ItemStack is, ISaveProvider host, StorageChannel channel) {
-//        if ((channel != StorageChannel.FLUIDS) || !(essentiaCell.getItem() instanceof ItemThaumiumCell)) {
-//            return null;
-//        }
+    public IMEInventoryHandler getCellInventory(ItemStack is, ISaveProvider saveProvider, StorageChannel channel) {
+		if (channel != TAE2.ESSENTIA_STORAGE) {
+			return null;
+		}
 
-        return new AspectCellInventory();
+        return new AspectCellInventory( bytesCapacity, typesCapacity);
     }
 
     @Override
@@ -40,6 +51,11 @@ public class ItemThaumiumCell extends Item implements ICellHandler {
     public IIcon getTopTexture_Medium() {
         return null;
     }
+
+//        if ((channel != StorageChannel.FLUIDS) || !(essentiaCell.getItem() instanceof ItemThaumiumCell)) {
+//            return null;
+//        }
+
 
     @Override
     public IIcon getTopTexture_Dark() {
@@ -53,7 +69,11 @@ public class ItemThaumiumCell extends Item implements ICellHandler {
 
     @Override
     public int getStatusForCell(ItemStack is, IMEInventory handler) {
-        return 0;
+		if (handler == null) {
+			return 0; // invalid
+		}
+
+        return ((AspectCellInventory) handler).getCellStatus();
     }
 
     @Override
