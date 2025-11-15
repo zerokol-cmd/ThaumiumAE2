@@ -1,4 +1,4 @@
-package com.myname.mymodid;
+package com.ThaumiumAE2.ThaumiumAE2;
 
 import java.io.File;
 

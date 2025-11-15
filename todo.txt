@@ -1,0 +1,4 @@
+priority name
+1 implement cell
+2 implement terminal view only
+3 implement easy to use terminal for getting and putting essentia
