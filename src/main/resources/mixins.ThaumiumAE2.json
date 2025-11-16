@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.ThaumiumAE2.ThaumiumAE2.Mixins",
+  "refmap": "mixins.ThaumiumAE2.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "StorageChannelMixin",
+    "TileDriveMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

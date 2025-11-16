@@ -1,7 +1,8 @@
-package com.ThaumiumAE2.ThaumiumAE2;
+package com.ThaumiumAE2.ThaumiumAE2.Proxies;
 
-import appeng.api.AEApi;
-import com.ThaumiumAE2.ThaumiumAE2.Items.ItemThaumiumCell;
+import com.ThaumiumAE2.ThaumiumAE2.Config;
+import com.ThaumiumAE2.ThaumiumAE2.TAE2;
+import com.ThaumiumAE2.ThaumiumAE2.Tags;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -17,7 +18,7 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
-//        AEApi.instance().registries().cell().addCellHandler(new ItemThaumiumCell());
+        // AEApi.instance().registries().cell().addCellHandler(new ItemThaumiumCell());
     }
 
     public void postInit(FMLPostInitializationEvent event) {}
