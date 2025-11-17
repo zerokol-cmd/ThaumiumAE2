@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.Items.Cells;
+package com.ThaumiumAE2.ThaumiumAE2.api;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.storage.StorageChannel;
@@ -15,20 +15,16 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets; // Requires Java 7/8. If not, use java.nio.charset.Charset.forName("UTF-8")
 import java.util.Objects;
 
-public class EssentiaStack extends Item implements ITAE2EssentiaStack, Comparable<EssentiaStack> {
-
-    private Aspect aspect;
-    private long stackSize = 0;
-    private long countRequestable = 0;
+public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaStack> {
+	private Aspect aspect;
+	private long stackSize;
+	private long countRequestable = 0;
     private boolean isCraftable = false;
 
-    // --- NBT Keys ---
-    private static final String NBT_KEY_ASPECT = "aspect";
+	private static final String NBT_KEY_ASPECT = "aspect";
     private static final String NBT_KEY_AMOUNT = "amount";
 
-    // --- Constructors ---
-
-    public EssentiaStack(Aspect aspect, long stackSize) {
+	public EssentiaStack(Aspect aspect, long stackSize) {
         this.aspect = aspect;
         this.stackSize = stackSize;
     }
@@ -40,12 +36,7 @@ public class EssentiaStack extends Item implements ITAE2EssentiaStack, Comparabl
         this.isCraftable = other.isCraftable;
     }
 
-    // --- Static Factory Methods ---
-
-    /**
-     * Creates an EssentiaStack from an NBT compound tag.
-     */
-    public static EssentiaStack fromNBT(NBTTagCompound tag) {
+	public static EssentiaStack fromNBT(NBTTagCompound tag) {
         if (tag == null || !tag.hasKey(NBT_KEY_ASPECT))
             return null;
 
@@ -57,22 +48,12 @@ public class EssentiaStack extends Item implements ITAE2EssentiaStack, Comparabl
         return new EssentiaStack(aspect, amount);
     }
 
-    /**
-     * Creates an EssentiaStack from a network packet buffer.
-     * Uses length-prefixed string reading common in older netty/forge.
-     */
     public static EssentiaStack fromPacket(ByteBuf data) throws IOException {
-        // Read the length of the string (short, 2 bytes)
         short length = data.readShort();
-
-        // Read the bytes of the string
         byte[] bytes = new byte[length];
         data.readBytes(bytes);
-
-        // Convert bytes to string (UTF-8 encoding)
         String aspectTag = new String(bytes, StandardCharsets.UTF_8);
 
-        // Read the stack size
         long amount = data.readLong();
 
         Aspect aspect = Aspect.getAspect(aspectTag);
@@ -81,39 +62,11 @@ public class EssentiaStack extends Item implements ITAE2EssentiaStack, Comparabl
         return new EssentiaStack(aspect, amount);
     }
 
-    // --- Comparison and Hashing ---
-
-    @Override
-    public int compareTo(@NotNull EssentiaStack other) {
-        return this.aspect.getTag().compareTo(other.aspect.getTag());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        EssentiaStack that = (EssentiaStack) obj;
-        // Standard AE2 stack equality ignores stack size
-        return Objects.equals(aspect, that.aspect);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(aspect);
-    }
-
-    // --- ITAE2EssentiaStack Implementation ---
-
     @Override
     public void add(ITAE2EssentiaStack option) {
-        if (option != null && this.getAspect().equals(option.getAspect())) {
-            this.stackSize += option.getStackSize();
-        }
-    }
-
-    @Override
-    public Aspect getAspect() {
-        return this.aspect;
+		if (option != null && option.getAspect() == aspect) {
+			this.stackSize += option.getStackSize();
+		}
     }
 
     @Override
@@ -163,51 +116,41 @@ public class EssentiaStack extends Item implements ITAE2EssentiaStack, Comparabl
 
     @Override
     public void incStackSize(long i) {
-        this.stackSize += i;
+		this.stackSize += i;
     }
 
     @Override
     public void decStackSize(long i) {
-        this.stackSize -= i;
+		this.stackSize -= i;
     }
 
     @Override
     public void incCountRequestable(long i) {
-        this.countRequestable += i;
+		this.countRequestable += i;
     }
 
     @Override
     public void decCountRequestable(long i) {
-        this.countRequestable -= i;
+		this.countRequestable -= i;
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        tag.setString(NBT_KEY_ASPECT, this.aspect.getTag());
+		tag.setString(NBT_KEY_ASPECT, this.aspect.getTag());
         tag.setLong(NBT_KEY_AMOUNT, this.stackSize);
     }
 
     @Override
-    public boolean fuzzyComparison(Object st, FuzzyMode mode) {
-        // Essentia has no NBT data to compare, so fuzzy is the same as equals
-        if (st instanceof EssentiaStack) {
-            return this.equals(st);
-        }
-        return false;
+    public boolean fuzzyComparison(Object o, FuzzyMode mode) {
+        return o instanceof EssentiaStack ? this.equals(o) : false;
     }
 
     @Override
     public void writeToPacket(ByteBuf data) throws IOException {
-        // Convert string to bytes
-        byte[] bytes = this.aspect.getTag().getBytes(StandardCharsets.UTF_8);
+		byte[] bytes = this.aspect.getTag().getBytes(StandardCharsets.UTF_8);
 
-        // Write the length (short, 2 bytes)
         data.writeShort(bytes.length);
-
-        // Write the bytes
         data.writeBytes(bytes);
-
-        // Write the stack size
         data.writeLong(this.stackSize);
     }
 
@@ -223,7 +166,6 @@ public class EssentiaStack extends Item implements ITAE2EssentiaStack, Comparabl
 
     @Override
     public IAETagCompound getTagCompound() {
-        // Essentia stacks don't have NBT data like ItemStacks
         return null;
     }
 
@@ -246,4 +188,29 @@ public class EssentiaStack extends Item implements ITAE2EssentiaStack, Comparabl
     public String getLocalizedName() {
         return this.aspect.getName();
     }
+
+    @Override
+    public Aspect getAspect() {
+        return this.aspect;
+    }
+
+	@Override
+    public int compareTo(@NotNull EssentiaStack other) {
+        return this.aspect.getTag().compareTo(other.aspect.getTag());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        EssentiaStack that = (EssentiaStack) obj;
+        // Standard AE2 stack equality ignores stack size
+        return Objects.equals(aspect, that.aspect);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(aspect);
+    }
+
 }

@@ -1,11 +1,9 @@
 package com.ThaumiumAE2.ThaumiumAE2;
 
-import com.ThaumiumAE2.ThaumiumAE2.Items.Cells.EssentiaStack;
 import com.ThaumiumAE2.ThaumiumAE2.Proxies.CommonProxy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.ThaumiumAE2.ThaumiumAE2.Items.Cells.ItemThaumiumCell;
 import com.ThaumiumAE2.ThaumiumAE2.Registers.ItemRegister;
 
 import appeng.api.storage.StorageChannel;

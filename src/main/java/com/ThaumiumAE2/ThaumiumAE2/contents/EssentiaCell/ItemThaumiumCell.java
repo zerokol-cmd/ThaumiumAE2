@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.Items.Cells;
+package com.ThaumiumAE2.ThaumiumAE2.contents.EssentiaCell;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -46,7 +46,7 @@ public class ItemThaumiumCell extends Item implements ICellHandler {
             return null;
         }
 
-        return new com.ThaumiumAE2.ThaumiumAE2.Items.AspectCellInventory(
+        return new AspectCellInventory(
             is,
             saveProvider,
             bytesCapacity,
@@ -84,7 +84,7 @@ public class ItemThaumiumCell extends Item implements ICellHandler {
             return 0; // invalid
         }
 
-        return ((com.ThaumiumAE2.ThaumiumAE2.Items.AspectCellInventory) handler).getCellStatus();
+        return ((AspectCellInventory) handler).getCellStatus();
     }
 
     @Override
