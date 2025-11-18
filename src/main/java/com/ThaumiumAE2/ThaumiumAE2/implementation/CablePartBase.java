@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.CableParts;
+package com.ThaumiumAE2.ThaumiumAE2.implementation;
 
 import appeng.api.AEApi;
 import appeng.api.config.SecurityPermissions;
@@ -26,7 +26,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
@@ -118,9 +117,12 @@ public abstract class CablePartBase implements IPart, IGridHost, IActionHost {
 
     @Override
     public IGridNode getGridNode(ForgeDirection dir) {
+        if(node == null){
+            this.node = AEApi.instance().createGridNode(this.getGridBlock());
+        }
         return this.node;
     }
-    
+
     public IGridNode getExternalFacingNode() {
         return null;
     }

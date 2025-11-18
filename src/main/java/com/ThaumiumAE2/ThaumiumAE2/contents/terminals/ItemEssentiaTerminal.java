@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.contents.Terminals;
+package com.ThaumiumAE2.ThaumiumAE2.contents.terminals;
 
 
 import appeng.api.parts.IPart;

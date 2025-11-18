@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.contents.IOBus;
+package com.ThaumiumAE2.ThaumiumAE2.contents.ioBus;
 
 import appeng.api.config.RedstoneMode;
 import appeng.api.config.SecurityPermissions;
@@ -11,15 +11,13 @@ import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartRenderHelper;
 import appeng.tile.inventory.IAEAppEngInventory;
 import appeng.tile.inventory.InvOperation;
-import com.ThaumiumAE2.ThaumiumAE2.CableParts.CablePartBase;
-import com.ThaumiumAE2.ThaumiumAE2.CableParts.GridBlock;
+import com.ThaumiumAE2.ThaumiumAE2.implementation.CablePartBase;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.IAspectContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +60,8 @@ public abstract class BasePartIO extends CablePartBase implements IGridTickable,
 
 		return false;
 	}
-	
-	
+
+
 	protected abstract boolean perform();
 
 	protected boolean isEnabled() {
@@ -81,12 +79,12 @@ public abstract class BasePartIO extends CablePartBase implements IGridTickable,
     public TickRateModulation tickingRequest(IGridNode node, int TicksSinceLastCall) {
 		if (this.isEnabled()) {
 			// TODO
-			
+
 			if (this.perform()) {
 				return TickRateModulation.URGENT;
 			}
 		}
-		
+
         return TickRateModulation.IDLE;
     }
 

@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.contents.EssentiaCell;
+package com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

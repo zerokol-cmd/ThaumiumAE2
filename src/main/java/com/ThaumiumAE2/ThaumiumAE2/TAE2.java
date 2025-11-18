@@ -1,6 +1,7 @@
 package com.ThaumiumAE2.ThaumiumAE2;
 
 import com.ThaumiumAE2.ThaumiumAE2.Proxies.CommonProxy;
+import com.ThaumiumAE2.ThaumiumAE2.Registers.GUIFactoriesRegister;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +14,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import thaumcraft.api.aspects.Aspect;
 
 @Mod(modid = TAE2.MODID, version = Tags.VERSION, name = "Thaumium AE2", acceptedMinecraftVersions = "[1.7.10]")
 public class TAE2 {
@@ -35,6 +35,7 @@ public class TAE2 {
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
         ItemRegister.register();
+        GUIFactoriesRegister.register();
         LOG.info("ESSENTIA_STORAGE = {}", ESSENTIA_STORAGE);
     }
 

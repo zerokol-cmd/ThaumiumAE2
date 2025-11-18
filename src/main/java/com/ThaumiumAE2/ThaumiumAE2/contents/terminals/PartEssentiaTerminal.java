@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.contents.Terminals;
+package com.ThaumiumAE2.ThaumiumAE2.contents.terminals;
 
 import appeng.api.config.SecurityPermissions;
 import appeng.api.networking.IGridNode;
@@ -10,24 +10,30 @@ import appeng.api.storage.ITerminalHost;
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.IConfigManager;
-import com.ThaumiumAE2.ThaumiumAE2.CableParts.CablePartBase;
-import com.ThaumiumAE2.ThaumiumAE2.CableParts.GridBlock;
-import com.ThaumiumAE2.ThaumiumAE2.TextureManager;
+import com.ThaumiumAE2.ThaumiumAE2.common.Gui.CablePartGuiFactory;
+import com.ThaumiumAE2.ThaumiumAE2.implementation.CablePartBase;
+import com.ThaumiumAE2.ThaumiumAE2.implementation.GridBlock;
+import com.ThaumiumAE2.ThaumiumAE2.implementation.TextureManager;
+import com.ThaumiumAE2.api.IGuiHolderProvider;
 import com.ThaumiumAE2.api.IMEEssentiaMonitor;
 import com.ThaumiumAE2.api.ITAE2EssentiaStack;
+import com.cleanroommc.modularui.api.IGuiHolder;
+import com.cleanroommc.modularui.factory.SidedPosGuiData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
 
-public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost, IMEEssentiaMonitor {
+public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost, IMEEssentiaMonitor, IGuiHolderProvider<SidedPosGuiData> {
 
     private static final String NBT_KEY_CONFIG = "config";
 
@@ -35,15 +41,25 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
     private IIcon frontIcon;
     private IIcon sideIcon;
 
+    @Override
+    public void addToWorld() {
+        super.addToWorld();
+        this.getGridBlock().getEssentiaCells();
+    }
+
     private IIcon screenIconActive;
     private IIcon screenIconInactive;
+    private final GUIEssentiaTerminal gui ;
 
-    @SideOnly(Side.CLIENT)
     public PartEssentiaTerminal(ItemStack associatedItem, SecurityPermissions... requiredPermissions) {
         super(associatedItem, requiredPermissions);
         this.sideIcon = TextureManager.ARCANE_CRAFTING.getTextures()[1];
         this.screenIconActive = screenIconInactive = TextureManager.ARCANE_CRAFTING.getTextures()[1];
         this.frontIcon = TextureManager.ARCANE_CRAFTING.getTextures()[0];
+
+//        this.getGridBlock().getEssentiaCells();
+        this.gui = new GUIEssentiaTerminal(null);
+
     }
 
 
@@ -67,29 +83,30 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
         }
 
         Tessellator.instance.setColorOpaque_I(0xFFFFFF);
-//main
+        //main
         rh.setTexture(this.sideIcon, this.sideIcon, this.sideIcon, this.frontIcon, this.sideIcon, this.sideIcon);
         rh.setBounds(2, 2, 13, 14, 14, 15);
         rh.renderBlock(x, y, z, renderer);
-//frame (replaced with 1-pixel border around the main display)
+
+        //frame (replaced with 1-pixel border around the main display)
         rh.setTexture(this.sideIcon, this.sideIcon, this.sideIcon, this.sideIcon, this.sideIcon, this.sideIcon);
 
-// Bottom bar
+        // Bottom bar
         rh.setBounds(1, 1, 15, 15, 2, 16);
         rh.renderBlock(x, y, z, renderer);
 
-// Top bar
+        // Top bar
         rh.setBounds(1, 14, 15, 15, 15, 16);
         rh.renderBlock(x, y, z, renderer);
 
-// Left bar
+        // Left bar
         rh.setBounds(1, 2, 15, 2, 14, 16);
         rh.renderBlock(x, y, z, renderer);
 
-// Right bar
+        // Right bar
         rh.setBounds(14, 2, 15, 15, 14, 16);
         rh.renderBlock(x, y, z, renderer);
-//connector
+            //connector
         rh.setBounds(4, 4, 12, 12, 12, 13);
         rh.renderBlock(x, y, z, renderer);
         rh.setBounds(5, 5, 11, 11, 11, 12);
@@ -99,7 +116,6 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
         if (this.isActive()) {
             Tessellator.instance.setBrightness(15728880); // A common brightness value for "on" things
         }
-
         // Determine which screen icon to use
 //        IIcon screenIcon = this.isActive() ? this.screenIconActive : this.screenIconInactive;
 //
@@ -113,6 +129,7 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
         // Not needed for a simple terminal
     }
 
+
     @Override
     public boolean onActivate(EntityPlayer player, Vec3 pos) {
         if (player.isSneaking()) {
@@ -120,7 +137,10 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
         }
 
         if (!this.getHostTile().getWorldObj().isRemote) {
-//            GuiHandler.launchGui(this, player, this.getHostTile().getWorldObj(), this.getHostTile().xCoord, this.getHostTile().yCoord, this.getHostTile().zCoord);
+            int x = this.getHostTile().xCoord;
+            int y = this.getHostTile().yCoord;
+            int z = this.getHostTile().zCoord;
+            CablePartGuiFactory.INSTANCE.open((EntityPlayerMP) player, this.getHostTile(), this.getSide());
         }
         return true;
     }
@@ -138,6 +158,12 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
     }
 
     @Override
+    public IGridNode getGridNode() {
+        //argument doesn't mean anything
+        return this.getGridNode(ForgeDirection.DOWN);
+    }
+
+    @Override
     public int cableConnectionRenderTo() {
         // Determines the size of the connection to the cable
         return 4;
@@ -149,8 +175,7 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
     }
 
     @Override
-    public boolean canBePlacedOn(BusSupport what) {
-        // Can only be placed on cables
+    public boolean canBePlacedOn(BusSupport type) {
         return type == BusSupport.CABLE;
     }
 
@@ -184,5 +209,11 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
     @Override
     public IMEMonitor<ITAE2EssentiaStack> getEssentiaInventory() {
         return null;
+    }
+
+
+    @Override
+    public IGuiHolder<SidedPosGuiData> getGuiHolder() {
+        return gui;
     }
 }

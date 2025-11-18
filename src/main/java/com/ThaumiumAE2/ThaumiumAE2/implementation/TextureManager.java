@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2;
+package com.ThaumiumAE2.ThaumiumAE2.implementation;
 
 import java.util.Arrays;
 import java.util.Collections;

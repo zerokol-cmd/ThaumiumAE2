@@ -1,4 +1,5 @@
-package com.ThaumiumAE2.ThaumiumAE2.api;
+package com.ThaumiumAE2.ThaumiumAE2.implementation;
+
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.storage.StorageChannel;
@@ -16,15 +17,15 @@ import java.nio.charset.StandardCharsets; // Requires Java 7/8. If not, use java
 import java.util.Objects;
 
 public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaStack> {
-	private Aspect aspect;
-	private long stackSize;
-	private long countRequestable = 0;
+    private final Aspect aspect;
+    private long stackSize;
+    private long countRequestable = 0;
     private boolean isCraftable = false;
 
-	private static final String NBT_KEY_ASPECT = "aspect";
+    private static final String NBT_KEY_ASPECT = "aspect";
     private static final String NBT_KEY_AMOUNT = "amount";
 
-	public EssentiaStack(Aspect aspect, long stackSize) {
+    public EssentiaStack(Aspect aspect, long stackSize) {
         this.aspect = aspect;
         this.stackSize = stackSize;
     }
@@ -36,7 +37,7 @@ public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaSta
         this.isCraftable = other.isCraftable;
     }
 
-	public static EssentiaStack fromNBT(NBTTagCompound tag) {
+    public static EssentiaStack fromNBT(NBTTagCompound tag) {
         if (tag == null || !tag.hasKey(NBT_KEY_ASPECT))
             return null;
 
@@ -64,9 +65,9 @@ public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaSta
 
     @Override
     public void add(ITAE2EssentiaStack option) {
-		if (option != null && option.getAspect() == aspect) {
-			this.stackSize += option.getStackSize();
-		}
+        if (option != null && option.getAspect() == aspect) {
+            this.stackSize += option.getStackSize();
+        }
     }
 
     @Override
@@ -116,27 +117,27 @@ public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaSta
 
     @Override
     public void incStackSize(long i) {
-		this.stackSize += i;
+        this.stackSize += i;
     }
 
     @Override
     public void decStackSize(long i) {
-		this.stackSize -= i;
+        this.stackSize -= i;
     }
 
     @Override
     public void incCountRequestable(long i) {
-		this.countRequestable += i;
+        this.countRequestable += i;
     }
 
     @Override
     public void decCountRequestable(long i) {
-		this.countRequestable -= i;
+        this.countRequestable -= i;
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-		tag.setString(NBT_KEY_ASPECT, this.aspect.getTag());
+        tag.setString(NBT_KEY_ASPECT, this.aspect.getTag());
         tag.setLong(NBT_KEY_AMOUNT, this.stackSize);
     }
 
@@ -147,7 +148,7 @@ public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaSta
 
     @Override
     public void writeToPacket(ByteBuf data) throws IOException {
-		byte[] bytes = this.aspect.getTag().getBytes(StandardCharsets.UTF_8);
+        byte[] bytes = this.aspect.getTag().getBytes(StandardCharsets.UTF_8);
 
         data.writeShort(bytes.length);
         data.writeBytes(bytes);
@@ -194,7 +195,7 @@ public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaSta
         return this.aspect;
     }
 
-	@Override
+    @Override
     public int compareTo(@NotNull EssentiaStack other) {
         return this.aspect.getTag().compareTo(other.aspect.getTag());
     }

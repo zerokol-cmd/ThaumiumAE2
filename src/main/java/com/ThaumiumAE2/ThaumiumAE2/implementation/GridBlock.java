@@ -1,11 +1,6 @@
-package com.ThaumiumAE2.ThaumiumAE2.CableParts;
+package com.ThaumiumAE2.ThaumiumAE2.implementation;
 
-import appeng.api.networking.GridFlags;
-import appeng.api.networking.GridNotification;
-import appeng.api.networking.IGrid;
-import appeng.api.networking.IGridBlock;
-import appeng.api.networking.IGridHost;
-import appeng.api.networking.IGridNode;
+import appeng.api.networking.*;
 import appeng.api.networking.energy.IEnergyGrid;
 import appeng.api.networking.security.ISecurityGrid;
 import appeng.api.networking.storage.IStorageGrid;
@@ -16,7 +11,11 @@ import appeng.api.util.AEColor;
 import appeng.api.util.DimensionalCoord;
 //import com.ThaumiumAE2.ThaumiumAE2.api.grid.IEssentiaGrid;
 //import com.ThaumiumAE2.ThaumiumAE2.api.grid.IMEEssentiaMonitor;
-import java.util.EnumSet;
+import java.util.*;
+
+import appeng.tile.storage.TileDrive;
+import com.ThaumiumAE2.ThaumiumAE2.TAE2;
+import com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell.AspectCellInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -60,10 +59,26 @@ public class GridBlock implements IGridBlock {
      *
      * @return The essentia monitor, or null if not available.
      */
-//    public IMEEssentiaMonitor getEssentiaMonitor() {
-//        IGrid grid = this.getGrid();
-//        return (grid != null) ? grid.getCache(IEssentiaGrid.class) : null;
-//    }
+    public List<AspectCellInventory> getEssentiaCells() {
+        IGrid grid = this.getGrid();
+        if (grid == null) {
+            return Collections.emptyList();
+        }
+
+        List<AspectCellInventory> cellList = new ArrayList<>();
+
+        IMachineSet machines = grid.getMachines(TileDrive.class);
+
+        for (IGridNode drive : machines) {
+            if(!(drive instanceof TileDrive)) continue;
+
+            for (var cell : ((TileDrive)drive).getCellArray(TAE2.ESSENTIA_STORAGE)) {
+                cellList.add((AspectCellInventory) cell);
+            }
+        }
+
+        return cellList;
+    }
 
     /**
      * Gets the item monitor from the network.
