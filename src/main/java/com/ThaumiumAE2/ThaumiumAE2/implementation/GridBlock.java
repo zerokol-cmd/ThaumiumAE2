@@ -13,9 +13,9 @@ import appeng.api.util.DimensionalCoord;
 //import com.ThaumiumAE2.ThaumiumAE2.api.grid.IMEEssentiaMonitor;
 import java.util.*;
 
-import appeng.tile.storage.TileDrive;
-import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-import com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell.AspectCellInventory;
+import com.ThaumiumAE2.api.IEssentiaGridCache;
+import com.ThaumiumAE2.api.IEssentiaNetwork;
+import com.ThaumiumAE2.api.IMEEssentiaMonitor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -54,30 +54,13 @@ public class GridBlock implements IGridBlock {
         return (grid != null) ? grid.getCache(IEnergyGrid.class) : null;
     }
 
-    /**
-     * Gets the essentia monitor from the network.
-     *
-     * @return The essentia monitor, or null if not available.
-     */
-    public List<AspectCellInventory> getEssentiaCells() {
+    public IEssentiaNetwork getEssentiaNetwork() {
         IGrid grid = this.getGrid();
-        if (grid == null) {
-            return Collections.emptyList();
-        }
+        if (grid == null) return null;
+        IEssentiaGridCache essentiaCache = grid.getCache(IEssentiaGridCache.class);
+        if (essentiaCache == null) return null;
 
-        List<AspectCellInventory> cellList = new ArrayList<>();
-
-        IMachineSet machines = grid.getMachines(TileDrive.class);
-
-        for (IGridNode drive : machines) {
-            if(!(drive instanceof TileDrive)) continue;
-
-            for (var cell : ((TileDrive)drive).getCellArray(TAE2.ESSENTIA_STORAGE)) {
-                cellList.add((AspectCellInventory) cell);
-            }
-        }
-
-        return cellList;
+        return essentiaCache.getEssentiaNetwork();
     }
 
     /**

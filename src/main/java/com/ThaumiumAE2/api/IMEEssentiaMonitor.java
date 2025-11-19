@@ -1,8 +1,66 @@
 package com.ThaumiumAE2.api;
 
+import appeng.api.config.Actionable;
+import appeng.api.networking.IGridCache;
+import appeng.api.networking.security.BaseActionSource;
 import appeng.api.storage.IMEMonitor;
 import appeng.api.storage.data.IAEFluidStack;
+import thaumcraft.api.aspects.Aspect;
 
-public interface IMEEssentiaMonitor {
+import javax.annotation.Nonnull;
+import java.util.Collection;
+
+public interface IMEEssentiaMonitor extends IGridCache, IMEMonitor<ITAE2EssentiaStack> {
+    /**
+     * Adds a listener to the essentia grid.
+     *
+     * @param listener
+     * @param verificationToken Token used to verify the receiver is still valid, and wants to continue receiving
+     *                          events.
+     */
+//    void addListener(@Nonnull IMEEssentiaMonitorReceiver listener, @Nonnull Object verificationToken);
+
+    /**
+     * Extract the specified essentia from the network.<br>
+     *
+     * @param aspect
+     * @param amount
+     * @param mode
+     * @param source
+     * @param powered If true will take the required power for the extraction, respecting the mode setting.
+     * @return The amount extracted.
+     */
+    long extractEssentia(@Nonnull Aspect aspect, long amount, @Nonnull Actionable mode,
+                         @Nonnull BaseActionSource source, boolean powered);
+
+    /**
+     * Returns the how much of the specified essentia is in the network.
+     *
+     * @param aspect
+     * @return
+     */
+    long getEssentiaAmount(@Nonnull Aspect aspect);
+
+    /**
+     * Gets the list of essentia in the network.
+     *
+     * @return
+     */
+    @Nonnull
+    Collection<ITAE2EssentiaStack> getEssentiaList();
+
+    /**
+     * Inject the specified essentia into the network.<br>
+     *
+     * @param aspect
+     * @param amount
+     * @param mode
+     * @param source
+     * @param powered If true will take the required power for the injection, respecting the mode setting.
+     * @return The amount that could <strong>not</strong> be injected.
+     */
+    long injectEssentia(@Nonnull Aspect aspect, long amount, @Nonnull Actionable mode, @Nonnull BaseActionSource source,
+                        boolean powered);
+
     public IMEMonitor<ITAE2EssentiaStack> getEssentiaInventory();
 }

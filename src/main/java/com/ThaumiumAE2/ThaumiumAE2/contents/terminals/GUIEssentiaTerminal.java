@@ -31,7 +31,6 @@ import java.util.List;
 public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
     @Nullable
     IEssentiaNetwork essentiaNetwork;
-
     GUIEssentiaTerminal(IEssentiaNetwork essentiaNetwork) {
         this.essentiaNetwork = essentiaNetwork;
     }
@@ -45,7 +44,6 @@ public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
 
         panel.bindPlayerInventory();  // Adds player item inventory/hotbar
 
-        // Build the 6x2 fluid grid via SlotGroupWidget.matrix
         panel.child(
             SlotGroupWidget.builder()
                 .matrix("FFFFFF", "FFFFFF")  // Defines 2 rows x 6 cols layout
