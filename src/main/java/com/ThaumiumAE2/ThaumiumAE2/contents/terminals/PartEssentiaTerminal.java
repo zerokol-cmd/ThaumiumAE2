@@ -14,6 +14,7 @@ import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.CablePartGuiFactory;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.CablePartBase;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.GridBlock;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.TextureManager;
+import com.ThaumiumAE2.api.IEssentiaNetwork;
 import com.ThaumiumAE2.api.IGuiHolderProvider;
 import com.ThaumiumAE2.api.IMEEssentiaMonitor;
 import com.ThaumiumAE2.api.ITAE2EssentiaStack;
@@ -33,7 +34,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
 
-public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost,  IGuiHolderProvider<SidedPosGuiData> {
+public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost, IGuiHolderProvider<SidedPosGuiData> {
 
     private static final String NBT_KEY_CONFIG = "config";
 
@@ -44,13 +45,15 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
 
     private IIcon screenIconActive;
     private IIcon screenIconInactive;
-    private GUIEssentiaTerminal gui ;
+    private GUIEssentiaTerminal gui = null;
 
     public PartEssentiaTerminal(ItemStack associatedItem, SecurityPermissions... requiredPermissions) {
         super(associatedItem, requiredPermissions);
         this.sideIcon = TextureManager.ARCANE_CRAFTING.getTextures()[1];
         this.screenIconActive = screenIconInactive = TextureManager.ARCANE_CRAFTING.getTextures()[1];
         this.frontIcon = TextureManager.ARCANE_CRAFTING.getTextures()[0];
+
+        this.gui = new GUIEssentiaTerminal();
     }
 
     /**
@@ -62,7 +65,7 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
         //Top issue:
         //TODO: the issue that we create our gui at server side but we use it at client.
         //We need to somehow fetch essentia network from server and create gui with it.(it's crucial for gui to have an access to EssentiaNetwork)
-        this.gui = new GUIEssentiaTerminal(this.getGridBlock().getEssentiaNetwork());
+        this.gui = new GUIEssentiaTerminal((IEssentiaNetwork) this.getGridBlock().getEssentiaNetwork());
     }
 
     @Override
@@ -108,7 +111,7 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
         // Right bar
         rh.setBounds(14, 2, 15, 15, 14, 16);
         rh.renderBlock(x, y, z, renderer);
-            //connector
+        //connector
         rh.setBounds(4, 4, 12, 12, 12, 13);
         rh.renderBlock(x, y, z, renderer);
         rh.setBounds(5, 5, 11, 11, 11, 12);

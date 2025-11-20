@@ -1,5 +1,5 @@
 priorities:
-1.  fix: gui syncronization design issue. More info at: PartEssentiaTerminal.addToWorld method.
+1.  Rewrite essentia sync manager.
 
 2 implement terminal view only
 	2.1 implement IStorageSystem for EssentiaStack or find a way around

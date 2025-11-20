@@ -5,6 +5,7 @@ import appeng.api.storage.ICellContainer;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
 import com.ThaumiumAE2.api.IEssentiaGridCache;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class EssentiaGridCache implements IEssentiaGridCache {
@@ -14,15 +15,17 @@ public class EssentiaGridCache implements IEssentiaGridCache {
     EssentiaNetwork network = new EssentiaNetwork();
 
     IGrid myGrid;
-    Collection<ICellContainer> cellProviders;
+    Collection<ICellContainer> cellProviders = new ArrayList<>();
 
     public EssentiaGridCache(final IGrid g) {
         this.myGrid = g;
     }
-
+    private void update(){
+        network.update(cellProviders);
+    }
     @Override
     public void onUpdateTick() {
-        network.update(cellProviders);
+        update();
     }
 
     /**
@@ -31,8 +34,10 @@ public class EssentiaGridCache implements IEssentiaGridCache {
      */
     @Override
     public void removeNode(IGridNode gridNode, IGridHost machine) {
+        if(cellProviders == null) return;
         if (machine instanceof ICellContainer provider) {
             cellProviders.remove(provider);
+            update();
         }
     }
 
@@ -45,6 +50,7 @@ public class EssentiaGridCache implements IEssentiaGridCache {
         if (machine instanceof ICellContainer provider) {
             if(!provider.getCellArray(TAE2.ESSENTIA_STORAGE).isEmpty()) {
                 cellProviders.add(provider);
+                update();
             }
         }
     }

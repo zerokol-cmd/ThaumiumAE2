@@ -1,5 +1,6 @@
 package com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell;
 
+import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -13,6 +14,7 @@ import appeng.api.storage.ICellCacheRegistry;
 import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.ISaveProvider;
 import appeng.api.storage.StorageChannel;
+import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
@@ -208,6 +210,13 @@ public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaSta
         return TAE2.ESSENTIA_STORAGE;
     }
 
+    @Override
+    public ITAE2EssentiaStack getAvailableItem(@NotNull ITAE2EssentiaStack request, int iteration) {
+        if (this.aspects.getAmount(request.getAspect()) > 0)
+            return request;// or            return new EssentiaStack(request.getAspect(), this.aspects.getAmount(request.getAspect()));
+        return null;
+    }
+
     // extension
     public void recalculateUsage() {
         typesUsed = this.aspects.size();
@@ -226,6 +235,7 @@ public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaSta
 
         return true;
     }
+
 
     public boolean canAcceptAmount(long amount) {
         return (this.aspects.visSize() + amount) / ESSENTIA_PER_BYTE < bytesTotal;
