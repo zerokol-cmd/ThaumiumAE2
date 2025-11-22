@@ -53,7 +53,7 @@ public abstract class BasePartIO extends CablePartBase implements IGridTickable,
 		}
 
 		for (int i = 0; i < filteredAspectsSize; i++) {
-			if (filteredAspects == aspect) {
+			if (filteredAspects.get(i) == aspect) {
 				return true;
 			}
 		}
@@ -61,8 +61,7 @@ public abstract class BasePartIO extends CablePartBase implements IGridTickable,
 		return false;
 	}
 
-
-	protected abstract boolean perform();
+	protected abstract boolean perform(int workAmount);
 
 	protected boolean isEnabled() {
 		// TODO: redstone
@@ -80,7 +79,8 @@ public abstract class BasePartIO extends CablePartBase implements IGridTickable,
 		if (this.isEnabled()) {
 			// TODO
 
-			if (this.perform()) {
+            int workAmount = Math.min(TicksSinceLastCall, MAXIMUM_TICKS_PER_OPERATION);
+			if (this.perform(workAmount)) {
 				return TickRateModulation.URGENT;
 			}
 		}

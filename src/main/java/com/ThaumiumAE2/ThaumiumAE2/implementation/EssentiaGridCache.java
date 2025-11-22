@@ -1,8 +1,12 @@
 package com.ThaumiumAE2.ThaumiumAE2.implementation;
 
 import appeng.api.networking.*;
+import appeng.api.networking.events.MENetworkEventSubscribe;
+import appeng.api.networking.events.MENetworkPostCacheConstruction;
 import appeng.api.storage.ICellContainer;
+import appeng.tile.storage.TileDrive;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
+import com.ThaumiumAE2.ThaumiumAE2.contents.terminals.GUIEssentiaTerminal;
 import com.ThaumiumAE2.api.IEssentiaGridCache;
 
 import java.util.ArrayList;
@@ -15,14 +19,16 @@ public class EssentiaGridCache implements IEssentiaGridCache {
     EssentiaNetwork network = new EssentiaNetwork();
 
     IGrid myGrid;
-    Collection<ICellContainer> cellProviders = new ArrayList<>();
+
 
     public EssentiaGridCache(final IGrid g) {
         this.myGrid = g;
     }
-    private void update(){
-        network.update(cellProviders);
+
+    private void update() {
+        network.updateCells();
     }
+
     @Override
     public void onUpdateTick() {
         update();
@@ -34,10 +40,8 @@ public class EssentiaGridCache implements IEssentiaGridCache {
      */
     @Override
     public void removeNode(IGridNode gridNode, IGridHost machine) {
-        if(cellProviders == null) return;
         if (machine instanceof ICellContainer provider) {
-            cellProviders.remove(provider);
-            update();
+            network.removeProvider(provider);
         }
     }
 
@@ -45,13 +49,14 @@ public class EssentiaGridCache implements IEssentiaGridCache {
      * @param gridNode added to grid node
      * @param machine  to be added machine
      */
+    //TODO:
     @Override
     public void addNode(IGridNode gridNode, IGridHost machine) {
         if (machine instanceof ICellContainer provider) {
-            if(!provider.getCellArray(TAE2.ESSENTIA_STORAGE).isEmpty()) {
-                cellProviders.add(provider);
-                update();
+            if (provider instanceof TileDrive drive) {
+                drive.onReady();
             }
+            network.addProvider(provider);
         }
     }
 
@@ -68,7 +73,6 @@ public class EssentiaGridCache implements IEssentiaGridCache {
      */
     @Override
     public void onJoin(IGridStorage sourceStorage) {
-
     }
 
     /**
@@ -81,6 +85,9 @@ public class EssentiaGridCache implements IEssentiaGridCache {
 
     @Override
     public EssentiaNetwork getEssentiaNetwork() {
+        if (network == null) {
+            this.network = new EssentiaNetwork();
+        }
         return network;
     }
 }

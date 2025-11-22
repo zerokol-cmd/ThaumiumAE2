@@ -9,6 +9,7 @@ import appeng.me.storage.MEInventoryHandler;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.storage.TileDrive;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
+import com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell.AspectCellInventory;
 import com.ThaumiumAE2.api.ITAE2EssentiaStack;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
@@ -29,22 +30,28 @@ public abstract class TileDriveMixin {
 
     // --- Shadowed Fields ---
     // We only need to shadow the fields our injections and overwrites actually use.
-    @Shadow private boolean isCached;
-    @Shadow private List<MEInventoryHandler<?>> items;
-    @Shadow private List<MEInventoryHandler<?>> fluids;
-    @Shadow @Final private AppEngInternalInventory inv;
-    @Shadow private int priority;
+    @Shadow
+    private boolean isCached;
+    @Shadow
+    private List<MEInventoryHandler<?>> items;
+    @Shadow
+    private List<MEInventoryHandler<?>> fluids;
+    @Shadow
+    @Final
+    private AppEngInternalInventory inv;
+    @Shadow
+    private int priority;
 //    @Shadow public abstract IActionHost getProxy();
 
     // --- Injected Field ---
     @Unique
-    private List<MEInventoryHandler<?>> thaumiumae2$essentia = new ArrayList<>();
+    private List<AspectCellInventory> thaumiumae2$essentia = new ArrayList<>();
 
     /**
      * @author YourName
      * @reason Inject Essentia cell scanning logic into the drive's update method.
      */
-    @Inject(method = "updateState()V", at = @At("TAIL"))
+    @Inject(method = "updateState()V", at = @At("HEAD"))
     private void tae2$onUpdateState(CallbackInfo ci) {
         // This code runs at the very end of the original updateState method.
         // The original method has already handled items and fluids.
@@ -63,12 +70,10 @@ public abstract class TileDriveMixin {
             ICellHandler handler = AEApi.instance().registries().cell().getHandler(is);
             if (handler != null) {
                 // Check if it's an Essentia cell
-                IMEInventoryHandler cell = handler.getCellInventory(is, (TileDrive) (Object) this, TAE2.ESSENTIA_STORAGE);
+                AspectCellInventory cell = (AspectCellInventory) handler.getCellInventory(is, (TileDrive) (Object) this, TAE2.ESSENTIA_STORAGE);
                 if (cell != null) {
-                    final MEInventoryHandler<ITAE2EssentiaStack> ih = new MEInventoryHandler<>(cell, cell.getChannel());
-                    ih.setPriority(this.priority);
                     // Add to our dedicated essentia list.
-                    this.thaumiumae2$essentia.add(ih);
+                    this.thaumiumae2$essentia.add(cell);
                 }
             }
         }

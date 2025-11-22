@@ -2,6 +2,9 @@ package com.ThaumiumAE2.ThaumiumAE2.contents.terminals;
 
 import appeng.api.config.SecurityPermissions;
 import appeng.api.networking.IGridNode;
+import appeng.api.networking.events.MENetworkEventSubscribe;
+import appeng.api.networking.events.MENetworkPostCacheConstruction;
+import appeng.api.networking.pathing.IPathingGrid;
 import appeng.api.parts.BusSupport;
 import appeng.api.parts.IPartCollisionHelper;
 import appeng.api.parts.IPartRenderHelper;
@@ -10,6 +13,8 @@ import appeng.api.storage.ITerminalHost;
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.IConfigManager;
+import com.ThaumiumAE2.ThaumiumAE2.TAE2;
+import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaNetwork;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.CablePartGuiFactory;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.CablePartBase;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.GridBlock;
@@ -20,6 +25,7 @@ import com.ThaumiumAE2.api.IMEEssentiaMonitor;
 import com.ThaumiumAE2.api.ITAE2EssentiaStack;
 import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.factory.SidedPosGuiData;
+import com.cleanroommc.modularui.network.NetworkUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -31,6 +37,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import thaumcraft.api.aspects.Aspect;
 
 import java.util.Random;
 
@@ -45,14 +52,13 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
 
     private IIcon screenIconActive;
     private IIcon screenIconInactive;
-    private GUIEssentiaTerminal gui = null;
+    private GUIEssentiaTerminal gui;
 
     public PartEssentiaTerminal(ItemStack associatedItem, SecurityPermissions... requiredPermissions) {
         super(associatedItem, requiredPermissions);
         this.sideIcon = TextureManager.ARCANE_CRAFTING.getTextures()[1];
         this.screenIconActive = screenIconInactive = TextureManager.ARCANE_CRAFTING.getTextures()[1];
         this.frontIcon = TextureManager.ARCANE_CRAFTING.getTextures()[0];
-
         this.gui = new GUIEssentiaTerminal();
     }
 
@@ -60,14 +66,14 @@ public class PartEssentiaTerminal extends CablePartBase implements ITerminalHost
      *
      */
     @Override
-    public void addToWorld() {
-        super.addToWorld();
-        //Top issue:
-        //TODO: the issue that we create our gui at server side but we use it at client.
-        //We need to somehow fetch essentia network from server and create gui with it.(it's crucial for gui to have an access to EssentiaNetwork)
-        this.gui = new GUIEssentiaTerminal((IEssentiaNetwork) this.getGridBlock().getEssentiaNetwork());
+    protected void updateStatus() {
+        super.updateStatus();
+        this.gui = new GUIEssentiaTerminal(this.getGridBlock().getEssentiaNetwork());
     }
 
+    /**
+     *
+     */
     @Override
     public void renderInventory(IPartRenderHelper rh, RenderBlocks renderer) {
         // Set the base textures from your texture manager

@@ -7,6 +7,7 @@ import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaSlotSyncHandler;
 import com.ThaumiumAE2.api.IEssentiaNetwork;
 import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.factory.SidedPosGuiData;
+import com.cleanroommc.modularui.network.NetworkUtils;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
@@ -43,14 +44,15 @@ public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
 
     GUIEssentiaTerminal(IEssentiaNetwork essentiaNetwork) {
         this.essentiaNetwork = essentiaNetwork;
-        this.essentiaNetwork.injectEssentia(Aspect.AIR, 10, false);
     }
 
 
     @Override
     public ModularPanel buildUI(SidedPosGuiData data, PanelSyncManager syncManager, UISettings settings) {
         ModularPanel panel = ModularPanel.defaultPanel("tutorial_gui");
-
+        if (essentiaNetwork != null)
+            this.essentiaNetwork.injectEssentia(Aspect.AIR, 10, false);
+        else
         syncManager.registerSlotGroup("tutorial_fluid", 1);
 //        syncHandler.setValue(new EssentiaStack(Aspect.AIR, 10));
 
@@ -63,8 +65,7 @@ public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
                         .syncHandler(new EssentiaSlotSyncHandler(
                             null, () -> {
                             if (essentiaNetwork == null) return null;
-                            if (!essentiaNetwork.getStoredEssentia().isEmpty()) return null;
-
+                            if (essentiaNetwork.getStoredEssentia().isEmpty()) return null;
                             return this.essentiaNetwork.getStoredEssentia().get(0);
                         }
                         ));

@@ -143,7 +143,7 @@ public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaSta
 
     @Override
     public boolean fuzzyComparison(Object o, FuzzyMode mode) {
-        return o instanceof EssentiaStack ? this.equals(o) : false;
+        return o instanceof EssentiaStack && this.equals(o);
     }
 
     @Override

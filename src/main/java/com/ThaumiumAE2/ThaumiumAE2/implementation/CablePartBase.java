@@ -60,7 +60,7 @@ public abstract class CablePartBase implements IPart, IGridHost, IActionHost {
         return this.gridBlock;
     }
 
-    private void updateStatus() {
+    protected void updateStatus() {
         if (this.hostTile == null || this.hostTile.getWorldObj() == null || this.hostTile.getWorldObj().isRemote) {
             return;
         }

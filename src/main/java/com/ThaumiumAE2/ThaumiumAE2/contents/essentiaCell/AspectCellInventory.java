@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
 import com.ThaumiumAE2.api.ITAE2EssentiaStack;
+import com.ThaumiumAE2.api.IAspectInventory;
 
 import appeng.api.config.AccessRestriction;
 import appeng.api.config.Actionable;
@@ -18,7 +19,9 @@ import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
-public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaStack>, ICellCacheRegistry {
+import java.util.List;
+
+public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaStack>, IAspectInventory, ICellCacheRegistry {
 
     // static public int MAX_BYTES = 16000;
     // static public int MAX_TYPES = 16;
@@ -51,12 +54,12 @@ public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaSta
         }
     }
 
-    private AspectList aspects;
+    private AspectList aspects = new AspectList();
     private NBTTagCompound data;
     private boolean hasVoiding = false;
 
-    private long bytesTotal = 0;
-    private long typesTotal = 0;
+    private long bytesTotal;
+    private long typesTotal;
 
     private long bytesUsed = 0;
     private long typesUsed = 0;
@@ -140,7 +143,7 @@ public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaSta
         Aspect aspect = input.getAspect();
         long size = input.getStackSize();
 
-        return this.canAcceptAspect(aspect) && this.canAcceptAmount(size);
+        return this.canAccept(aspect) && this.canAcceptAmount(size);
     }
 
     @Override
@@ -160,48 +163,18 @@ public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaSta
 
     // https://github.com/GTNewHorizons/Applied-Energistics-2-Unofficial/blob/master/src/main/java/appeng/api/storage/IMEInventory.java
     @Override
-    public ITAE2EssentiaStack injectItems(ITAE2EssentiaStack input, Actionable actionType, BaseActionSource src) {
+    public ITAE2EssentiaStack injectItems(ITAE2EssentiaStack request, Actionable actionType, BaseActionSource src) {
         // returns the number of items not added.
-        final Aspect aspect = input.getAspect();
-        final long size = input.getStackSize();
-        if (!this.canAcceptAspect(aspect)) {
-            return input;
-        }
-
-        final long maxEssentia = bytesTotal * ESSENTIA_PER_BYTE;
-        final long essentiaCanBeInserted = maxEssentia - this.aspects.visSize();
-
-        // min(size, essentiaCanBeInserted)
-        final int toInsert = Math.toIntExact(Math.min(size, essentiaCanBeInserted));
-
-        // !Actionable.SIMULATE
-        if (actionType == Actionable.MODULATE) {
-            this.aspects.add(aspect, toInsert);
-            this.recalculateUsage();
-        }
-
-        if (!hasVoiding) {
-            input.setStackSize(size - toInsert);
-        } else {
-            input.setStackSize(0);
-        }
-        return input;
+        final long amount = request.getStackSize();
+        long injected = this.injectEssentia(request.getAspect(), amount, actionType == Actionable.SIMULATE, src);
+        request.setStackSize(amount - injected);
+        return request;
     }
 
     @Override
     public ITAE2EssentiaStack extractItems(ITAE2EssentiaStack request, Actionable actionType, BaseActionSource src) {
-        final Aspect aspect = request.getAspect();
-        final int size = (int) request.getStackSize();
-
-        final int toExtract = Math.min(size, this.aspects.getAmount(aspect));
-
-        // !Actionable.SIMULATE
-        if (actionType == Actionable.MODULATE) {
-            this.aspects.remove(aspect, toExtract);
-            this.recalculateUsage();
-        }
-        request.setStackSize(toExtract);
-
+        long extracted = this.extractEssentia(request.getAspect(), request.getStackSize(), actionType == Actionable.SIMULATE, src);
+        request.setStackSize(extracted);
         return request;
     }
 
@@ -212,10 +185,74 @@ public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaSta
 
     @Override
     public ITAE2EssentiaStack getAvailableItem(@NotNull ITAE2EssentiaStack request, int iteration) {
-        if (this.aspects.getAmount(request.getAspect()) > 0)
+        int amount = this.aspects.getAmount(request.getAspect());
+        if (amount > 0) {
+            request.setStackSize((long) amount);
             return request;// or            return new EssentiaStack(request.getAspect(), this.aspects.getAmount(request.getAspect()));
+        }
         return null;
     }
+
+
+    /**
+     * @return
+     */
+    @Override
+    public AspectList getStoredEssentia() {
+        return aspects;
+    }
+
+    @Override
+    public boolean canAccept(Aspect aspect) {
+        // TODO: implement preformatting
+        if (this.aspects.getAmount(aspect) == 0) {
+            return typesUsed < typesTotal;
+        }
+
+        return true;
+    }
+
+	@Override
+	public long injectEssentia(Aspect aspect, long amount, boolean simulate, BaseActionSource src) {
+        if (!this.canAccept(aspect)) {
+            return 0;
+        }
+
+        final long maxEssentia = bytesTotal * ESSENTIA_PER_BYTE;
+        final long essentiaCanBeInserted = maxEssentia - this.aspects.visSize();
+
+        final int canInject = Math.toIntExact(Math.min(amount, essentiaCanBeInserted));
+
+        if (!simulate) {
+            this.aspects.add(aspect, canInject);
+            this.recalculateUsage();
+        }
+
+        if (hasVoiding) {
+            return amount;
+        }
+
+        return canInject;
+    }
+
+	@Override
+	public long extractEssentia(Aspect aspect, long amount, boolean simulate, BaseActionSource src) {
+        int canExtract = Math.min((int)amount, this.aspects.getAmount(aspect));
+
+        if (!simulate) {
+            this.aspects.remove(aspect, canExtract);
+            this.recalculateUsage();
+        }
+
+        return canExtract;
+    }
+
+	@Override
+	public long getEssentiaAmount(Aspect aspect) {
+        return this.aspects.getAmount(aspect);
+    }
+
+
 
     // extension
     public void recalculateUsage() {
@@ -226,16 +263,6 @@ public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaSta
 
         this.updateToNBT();
     }
-
-    // TODO: implement preformatting
-    public boolean canAcceptAspect(Aspect aspect) {
-        if (this.aspects.getAmount(aspect) == 0) {
-            return typesUsed < typesTotal;
-        }
-
-        return true;
-    }
-
 
     public boolean canAcceptAmount(long amount) {
         return (this.aspects.visSize() + amount) / ESSENTIA_PER_BYTE < bytesTotal;
