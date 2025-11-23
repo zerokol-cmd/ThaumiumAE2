@@ -1,40 +1,25 @@
 package com.ThaumiumAE2.ThaumiumAE2.contents.terminals;
 
-import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaNetwork;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaSlot;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaSlotSyncHandler;
 import com.ThaumiumAE2.api.IEssentiaNetwork;
 import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.factory.SidedPosGuiData;
-import com.cleanroommc.modularui.network.NetworkUtils;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
-import com.cleanroommc.modularui.utils.Alignment;
-import com.cleanroommc.modularui.utils.FluidTankHandler;
-import com.cleanroommc.modularui.utils.item.IItemHandler;
-import com.cleanroommc.modularui.utils.item.ItemStackHandler;
-import com.cleanroommc.modularui.value.sync.InteractionSyncHandler;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
-import com.cleanroommc.modularui.widgets.ButtonWidget;
-import com.cleanroommc.modularui.widgets.SlotGroupWidget;
-import com.cleanroommc.modularui.widgets.slot.FluidSlot;
-import com.cleanroommc.modularui.widgets.slot.ItemSlot;
-import com.cleanroommc.modularui.widgets.slot.ModularSlot;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.IFluidTank;
+import com.cleanroommc.modularui.widgets.layout.Grid;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
+import static com.cleanroommc.modularui.network.NetworkUtils.isClient;
+
 public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
+    private EssentiaStack EMPTY = null;
     @Nullable
     IEssentiaNetwork essentiaNetwork;
     EssentiaSlotSyncHandler syncHandler;
@@ -46,41 +31,65 @@ public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
         this.essentiaNetwork = essentiaNetwork;
     }
 
-
+    static final int MAX_SLOTS = 81;
     @Override
     public ModularPanel buildUI(SidedPosGuiData data, PanelSyncManager syncManager, UISettings settings) {
         ModularPanel panel = ModularPanel.defaultPanel("tutorial_gui");
-        if (essentiaNetwork != null)
+
+        // Step 1: Get essentia data on SERVER
+        List<EssentiaStack> essentiaData = new ArrayList<>();
+        if (essentiaNetwork != null) {
             this.essentiaNetwork.injectEssentia(Aspect.AIR, 10, false);
-        else
-        syncManager.registerSlotGroup("tutorial_fluid", 1);
-//        syncHandler.setValue(new EssentiaStack(Aspect.AIR, 10));
+            this.essentiaNetwork.injectEssentia(Aspect.EARTH, 10, false);
+            this.essentiaNetwork.injectEssentia(Aspect.ORDER, 10, false);
+            this.essentiaNetwork.injectEssentia(Aspect.ENTROPY, 10, false);
+            this.essentiaNetwork.injectEssentia(Aspect.FIRE, 10, false);
+            this.essentiaNetwork.injectEssentia(Aspect.WATER, 10, false);
+            this.essentiaNetwork.injectEssentia(Aspect.VOID, 10, false);
+            essentiaData.addAll(this.essentiaNetwork.getStoredEssentia());
+        }
 
-        panel.bindPlayerInventory();  // Adds player item inventory/hotbar
-        panel.child(
-            SlotGroupWidget.builder()
-                .matrix("FE")  // Defines 2 rows x 6 cols layout
-                .key('E', index -> {  // 'F' = fluid slot; index auto-assigned 0-11 row-major
-                    return new EssentiaSlot()
-                        .syncHandler(new EssentiaSlotSyncHandler(
-                            null, () -> {
-                            if (essentiaNetwork == null) return null;
-                            if (essentiaNetwork.getStoredEssentia().isEmpty()) return null;
-                            return this.essentiaNetwork.getStoredEssentia().get(0);
-                        }
-                        ));
-                })
-                .build()
-        );
+        // Step 2: Create widgets with sync handlers
+        // Let the widgets auto-register the sync handlers - DON'T call syncManager.syncValue()
+        List<EssentiaSlot> slots = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            final int index = i;
 
-        // Add sort button next to the grid (e.g., at x=7 + 6*18 + 2 = 117, y=18)
+            // Create sync handler with server getter
+            EssentiaSlotSyncHandler syncHandler = new EssentiaSlotSyncHandler(
+                // Client getter - null means use cache
+                null,
+                // Server getter - returns actual data
+                () -> {
+                    if (essentiaNetwork != null) {
+                        List<EssentiaStack> stored = essentiaNetwork.getStoredEssentia();
+                        return index < stored.size() ? stored.get(index) : new EssentiaStack(Aspect.AIR, 0);
+                    }
+                    return new EssentiaStack(Aspect.AIR, 0);
+                }
+            );
+
+            // Attach to widget - this will auto-register with syncManager
+            EssentiaSlot slot = new EssentiaSlot()
+                .syncHandler(syncHandler);
+            slots.add(slot);
+        }
+
+        panel.bindPlayerInventory();
         panel.child(
-            new ButtonWidget().syncHandler(
-                new InteractionSyncHandler().setOnMousePressed(a -> {
-//                    sortTanks();
-                })
-            )
+            new Grid()/*.size(150)*/.mapTo(9, slots).pos(9,9).scrollable().horizontalCenter().sizeRel(0.95f,0.5f)
         );
+//        TAE2.LOG.info("Building the ui finished.");
+//        for (int i = 0; i <10; i++) {
+//            panel.child(
+//                new EssentiaSlot().syncHandler(
+//                    new EssentiaSlotSyncHandler(null,() ->
+//                        new EssentiaStack(Aspect.ENTROPY, 0)
+//                     )
+//                ).pos(i*18,i*18)
+//            );
+//        }
+
         return panel;
     }
 }

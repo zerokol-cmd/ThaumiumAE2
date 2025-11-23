@@ -13,8 +13,7 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
 
-        TAE2.LOG.info(Config.greeting);
-        TAE2.LOG.info("I am MyMod at version " + Tags.VERSION);
+
     }
 
     public void init(FMLInitializationEvent event) {

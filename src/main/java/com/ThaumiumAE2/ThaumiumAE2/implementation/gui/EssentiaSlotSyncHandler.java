@@ -33,7 +33,7 @@ public class EssentiaSlotSyncHandler extends ValueSyncHandler<EssentiaStack> {
 
 
     @Nullable
-    private EssentiaStack cache;
+    private EssentiaStack cache = null;
 
     Supplier<EssentiaStack> getter;
     public EssentiaSlotSyncHandler(Supplier<EssentiaStack> clientGetter, Supplier<EssentiaStack> serverGetter) {
@@ -48,14 +48,13 @@ public class EssentiaSlotSyncHandler extends ValueSyncHandler<EssentiaStack> {
         this.cache = this.getter.get();
     }
 
-//    public EssentiaSlotSyncHandler() {
-//    }
+    public EssentiaSlotSyncHandler() {
+    }
 
 
     @Override
     public void setValue(EssentiaStack value, boolean setSource, boolean sync) {
-        EssentiaStack essentia = (EssentiaStack) value.copy();
-        this.cache = essentia;
+        this.cache = (EssentiaStack) value.copy();
         onValueChanged();
     }
 
@@ -66,7 +65,6 @@ public class EssentiaSlotSyncHandler extends ValueSyncHandler<EssentiaStack> {
     }
     // This method now reflects the selected Essentia and its amount in the network
 
-    int i = 0;
 
     @Override
     public boolean updateCacheFromSource(boolean isFirstSync) {

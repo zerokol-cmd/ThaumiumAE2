@@ -21,7 +21,7 @@ public class TAE2 {
 
     public static final String MODID = "ThaumiumAE2";
 
-    public static final Logger LOG = LogManager.getLogger(MODID);
+//    public static final Logger LOG = LogManager.getLogger(MODID);
 
     @SidedProxy(clientSide = "com.ThaumiumAE2.ThaumiumAE2.Proxies.ClientProxy", serverSide = "com.ThaumiumAE2.ThaumiumAE2.Proxies.CommonProxy")
     public static CommonProxy proxy;
@@ -38,7 +38,7 @@ public class TAE2 {
         ItemRegister.register();
         GUIFactoriesRegister.register();
         GridCacheRegister.register();
-        LOG.info("ESSENTIA_STORAGE = {}", ESSENTIA_STORAGE);
+//        LOG.info("ESSENTIA_STORAGE = {}", ESSENTIA_STORAGE);
     }
 
     @Mod.EventHandler
