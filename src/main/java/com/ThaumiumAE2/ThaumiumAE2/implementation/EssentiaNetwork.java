@@ -20,7 +20,7 @@ public class EssentiaNetwork implements IEssentiaNetwork {
     public void updateCells() {
         cellContainers.forEach(container -> {
             var cells = container.getCellArray(TAE2.ESSENTIA_STORAGE);
-
+            essentiaCellInventories.clear();
             for (var cell : cells) {
                 if (cell instanceof AspectCellInventory essentiaCellInv) {
                     essentiaCellInventories.add(essentiaCellInv);

@@ -23,15 +23,17 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
     public static final int DEFAULT_SIZE = 18;
     EssentiaSlotSyncHandler syncHandler = new EssentiaSlotSyncHandler();
     Supplier<EssentiaStack> essentiaSupplier;
+    boolean isEmpty = false;
 
     public EssentiaSlot() {
+        this.isEmpty = true;
         size(DEFAULT_SIZE);
         tooltip().setAutoUpdate(true);//.setHasTitleMargin(true);
         tooltipBuilder(this::addToolTip);
     }
 
     protected void addToolTip(RichTooltip tooltip) {
-        if (this.syncHandler.getValue() != null) {
+        if (this.syncHandler.getValue() != null && !isEmpty) {
             Aspect aspect = this.syncHandler.getValue().getAspect();
             tooltip.textColor(aspect.getColor());
             tooltip.add(aspect.getName());
@@ -40,12 +42,19 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
     }
 
     public EssentiaSlot syncHandler(EssentiaSlotSyncHandler syncHandler) {
+
+        this.isEmpty = true;
         setSyncHandler(syncHandler);
         this.syncHandler = syncHandler;
         return this;
     }
 
+    public EssentiaSlot makeEmpty() {
+        isEmpty = true;
+        return this;
+    }
     public EssentiaSlot value(EssentiaStack newValue) {
+        isEmpty = false;
         this.syncHandler.setValue(newValue);
         syncHandler.notifyUpdate();
         return this;
@@ -58,98 +67,26 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
     }
 
     private void drawAspect(EssentiaStack stack, int z) {
-        if (stack == null) return;
-        UtilsFX.drawTag(1, 1, stack.getAspect(), stack.getStackSize(), 0, z,771,1.f,false);
+        if (stack == null ) return;
+        UtilsFX.drawTag(1, 1, stack.getAspect(), stack.getStackSize(), 0, z, 771, 1.f, false);
     }
-    private static void cleanupGLState() {
-        // Reset matrix stacks
-//        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-//        GL11.glLoadIdentity();
-//        GL11.glMatrixMode(GL11.GL_PROJECTION);
-//        GL11.glLoadIdentity();
-//        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-//
-//        // Reset color
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-//
-//        // Reset blending
-//        GL11.glDisable(GL11.GL_BLEND);
-//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-//
-//        // Reset alpha test
-//        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-//        GL11.glDisable(GL11.GL_ALPHA_TEST);
-//
-//        // Reset depth
-//        GL11.glDisable(GL11.GL_DEPTH_TEST);
-//        GL11.glDepthMask(true);
-//        GL11.glDepthFunc(GL11.GL_LEQUAL);
-//
-//        // Reset lighting
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_LIGHT0);
-        GL11.glDisable(GL11.GL_LIGHT1);
-        GL11.glDisable(GL11.GL_COLOR_MATERIAL);
-//
-//        // Reset textures
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-//
-//        // Reset fog
-        GL11.glDisable(GL11.GL_FOG);
-//
-//        // Reset culling
-        GL11.glDisable(GL11.GL_CULL_FACE);
 
-        // Reset polygon offset
-        GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-        GL11.glPolygonOffset(0.0F, 0.0F);
 
-        // Reset scissor test
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
-
-//         Reset line width and point size
-//        GL11.glLineWidth(1.0F);
-//        GL11.glPointSize(1.0F);
-    }
     @Override
     public void draw(ModularGuiContext context, WidgetThemeEntry<?> widgetTheme) {
-        if (this.syncHandler.getValue() == null) return;
-        cleanupGLState();
-
-        try {
-            EssentiaStack stack = this.syncHandler.getValue();
-
-            if (stack != null && stack.getAspect() != null) {
-
-//                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
-                // Enable proper blending
-//                GlStateManager.enableBlend();
-//                GlStateManager.tryBlendFuncSeparate(
-//                    GL11.GL_SRC_ALPHA,
-//                    GL11.GL_ONE_MINUS_SRC_ALPHA,
-//                    GL11.GL_ONE,
-//                    GL11.GL_ZERO
-//                );
-                GlStateManager.enableTexture2D();
-
-                drawAspect(stack, context.getCurrentDrawingZ());
-            }
-
-            // Draw slot background/border if needed
-            // GuiDraw.drawBorder(...);
-
-        } finally {
-            // Always restore GL state, even if exception occurs
-//            GL11.glPopMatrix();
-//            GL11.glPopAttrib();
-//
-//            // Explicitly reset commonly problematic states
-//            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-//            GlStateManager.disableBlend();
-//            GlStateManager.enableLighting();
+        if (this.syncHandler.getValue() == null){
+            isEmpty = true;
         }
+
+        EssentiaStack stack = this.syncHandler.getValue();
+
+        if (stack != null && stack.getAspect() != null) {
+
+            GlStateManager.enableTexture2D();
+
+            drawAspect(stack, context.getCurrentDrawingZ());
+        }
+
 
     }
 

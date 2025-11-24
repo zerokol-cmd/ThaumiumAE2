@@ -1,6 +1,8 @@
 package com.ThaumiumAE2.ThaumiumAE2.contents.terminals;
 
 import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
+import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaGridWidget;
+import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaGridWidgetSyncHandler;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaSlot;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaSlotSyncHandler;
 import com.ThaumiumAE2.api.IEssentiaNetwork;
@@ -32,6 +34,7 @@ public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
     }
 
     static final int MAX_SLOTS = 81;
+
     @Override
     public ModularPanel buildUI(SidedPosGuiData data, PanelSyncManager syncManager, UISettings settings) {
         ModularPanel panel = ModularPanel.defaultPanel("tutorial_gui");
@@ -39,45 +42,29 @@ public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
         // Step 1: Get essentia data on SERVER
         List<EssentiaStack> essentiaData = new ArrayList<>();
         if (essentiaNetwork != null) {
-            this.essentiaNetwork.injectEssentia(Aspect.AIR, 10, false);
-            this.essentiaNetwork.injectEssentia(Aspect.EARTH, 10, false);
-            this.essentiaNetwork.injectEssentia(Aspect.ORDER, 10, false);
-            this.essentiaNetwork.injectEssentia(Aspect.ENTROPY, 10, false);
-            this.essentiaNetwork.injectEssentia(Aspect.FIRE, 10, false);
-            this.essentiaNetwork.injectEssentia(Aspect.WATER, 10, false);
-            this.essentiaNetwork.injectEssentia(Aspect.VOID, 10, false);
+//            this.essentiaNetwork.injectEssentia(Aspect.AIR, 0, false);
+//            this.essentiaNetwork.injectEssentia(Aspect.EARTH, 0, false);
+//            this.essentiaNetwork.injectEssentia(Aspect.ORDER, 0, false);
+//            this.essentiaNetwork.injectEssentia(Aspect.ENTROPY, 0, false);
+//            this.essentiaNetwork.injectEssentia(Aspect.FIRE, 0, false);
+//            for (int x = 0; x < 100; x++)
+//                this.essentiaNetwork.injectEssentia(Aspect.WATER, 0, false);
+            Aspect.getCompoundAspects().forEach(aspect ->
+                this.essentiaNetwork.injectEssentia(aspect, 1, false)
+            );
+
+//            this.essentiaNetwork.injectEssentia(Aspect.VOID, 0, false);
+
             essentiaData.addAll(this.essentiaNetwork.getStoredEssentia());
         }
 
-        // Step 2: Create widgets with sync handlers
-        // Let the widgets auto-register the sync handlers - DON'T call syncManager.syncValue()
-        List<EssentiaSlot> slots = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            final int index = i;
-
-            // Create sync handler with server getter
-            EssentiaSlotSyncHandler syncHandler = new EssentiaSlotSyncHandler(
-                // Client getter - null means use cache
-                null,
-                // Server getter - returns actual data
-                () -> {
-                    if (essentiaNetwork != null) {
-                        List<EssentiaStack> stored = essentiaNetwork.getStoredEssentia();
-                        return index < stored.size() ? stored.get(index) : new EssentiaStack(Aspect.AIR, 0);
-                    }
-                    return new EssentiaStack(Aspect.AIR, 0);
-                }
-            );
-
-            // Attach to widget - this will auto-register with syncManager
-            EssentiaSlot slot = new EssentiaSlot()
-                .syncHandler(syncHandler);
-            slots.add(slot);
-        }
-
+        var gridSync = new EssentiaGridWidgetSyncHandler(() ->
+            essentiaNetwork.getStoredEssentia()
+        );
+        syncManager.syncValue("essentia_grid", gridSync);
         panel.bindPlayerInventory();
         panel.child(
-            new Grid()/*.size(150)*/.mapTo(9, slots).pos(9,9).scrollable().horizontalCenter().sizeRel(0.95f,0.5f)
+            new EssentiaGridWidget(7, 3).syncHandler(gridSync).horizontalCenter()
         );
 //        TAE2.LOG.info("Building the ui finished.");
 //        for (int i = 0; i <10; i++) {
