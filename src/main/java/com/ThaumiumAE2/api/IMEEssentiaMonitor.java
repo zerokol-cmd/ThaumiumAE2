@@ -4,7 +4,6 @@ import appeng.api.config.Actionable;
 import appeng.api.networking.IGridCache;
 import appeng.api.networking.security.BaseActionSource;
 import appeng.api.storage.IMEMonitor;
-import appeng.api.storage.data.IAEFluidStack;
 import thaumcraft.api.aspects.Aspect;
 
 import javax.annotation.Nonnull;

@@ -22,11 +22,15 @@ public class EssentiaGridWidget extends ParentWidget<EssentiaGridWidget> impleme
         VerticalScrollData scrollData = new VerticalScrollData();
         scrollData.setCancelScrollEdge(true);
         grid.scrollable(scrollData);
-        sizeRel(1);
+        width(columns*18);
+        heightRel(0.5f);
 //        this.grid.sizeRel(1);
 //        this.grid.size(18 * columns, 18 * rows );//crutch
 //        this.size(18 * columns, 18 * rows );//TODO: *8 is a crotch  crutch
-        this.grid.sizeRel(0.8F, 0.45F);
+
+        this.grid.width(columns*18+10);
+
+        this.grid.heightRel( 1.F);
         List<EssentiaSlot> rowSlots = new ArrayList<>();
         for (int i = 0; i < initialSlots; i++) {
             rowSlots.add(new EssentiaSlot());

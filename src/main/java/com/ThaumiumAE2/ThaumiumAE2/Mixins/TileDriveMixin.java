@@ -1,7 +1,6 @@
 package com.ThaumiumAE2.ThaumiumAE2.Mixins;
 
 import appeng.api.AEApi;
-import appeng.api.networking.security.IActionHost;
 import appeng.api.storage.ICellHandler;
 import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.StorageChannel;
@@ -10,13 +9,8 @@ import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.storage.TileDrive;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
 import com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell.AspectCellInventory;
-import com.ThaumiumAE2.api.ITAE2EssentiaStack;
 import net.minecraft.item.ItemStack;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;

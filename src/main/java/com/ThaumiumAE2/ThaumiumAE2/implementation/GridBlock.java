@@ -9,15 +9,12 @@ import appeng.api.storage.IMEMonitor;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.AEColor;
 import appeng.api.util.DimensionalCoord;
-//import com.ThaumiumAE2.ThaumiumAE2.api.grid.IEssentiaGrid;
-//import com.ThaumiumAE2.ThaumiumAE2.api.grid.IMEEssentiaMonitor;
-import java.util.*;
-
 import com.ThaumiumAE2.api.IEssentiaGridCache;
 import com.ThaumiumAE2.api.IEssentiaNetwork;
-import com.ThaumiumAE2.api.IMEEssentiaMonitor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.EnumSet;
 
 /**
  * AE GridBlock used for all ThaumiumAE2 parts.

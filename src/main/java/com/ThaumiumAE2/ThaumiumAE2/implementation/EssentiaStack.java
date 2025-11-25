@@ -7,13 +7,12 @@ import appeng.api.storage.data.IAETagCompound;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
 import com.ThaumiumAE2.api.ITAE2EssentiaStack;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.aspects.Aspect;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets; // Requires Java 7/8. If not, use java.nio.charset.Charset.forName("UTF-8")
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaStack> {

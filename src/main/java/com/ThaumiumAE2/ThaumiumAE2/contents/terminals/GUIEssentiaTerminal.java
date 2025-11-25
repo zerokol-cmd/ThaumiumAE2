@@ -3,7 +3,6 @@ package com.ThaumiumAE2.ThaumiumAE2.contents.terminals;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaGridWidget;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaGridWidgetSyncHandler;
-import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaSlot;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.EssentiaSlotSyncHandler;
 import com.ThaumiumAE2.api.IEssentiaNetwork;
 import com.cleanroommc.modularui.api.IGuiHolder;
@@ -11,14 +10,11 @@ import com.cleanroommc.modularui.factory.SidedPosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
-import com.cleanroommc.modularui.widgets.layout.Grid;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.cleanroommc.modularui.network.NetworkUtils.isClient;
 
 public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
     private EssentiaStack EMPTY = null;
@@ -57,6 +53,8 @@ public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
 
             essentiaData.addAll(this.essentiaNetwork.getStoredEssentia());
         }
+        panel.width(176);
+        panel.heightRel(0.4f);
 
         var gridSync = new EssentiaGridWidgetSyncHandler(() ->
             essentiaNetwork.getStoredEssentia()
@@ -64,7 +62,7 @@ public class GUIEssentiaTerminal implements IGuiHolder<SidedPosGuiData> {
         syncManager.syncValue("essentia_grid", gridSync);
         panel.bindPlayerInventory();
         panel.child(
-            new EssentiaGridWidget(7, 3).syncHandler(gridSync).horizontalCenter()
+            new EssentiaGridWidget(7, 3).syncHandler(gridSync).horizontalCenter().top(15)
         );
 //        TAE2.LOG.info("Building the ui finished.");
 //        for (int i = 0; i <10; i++) {

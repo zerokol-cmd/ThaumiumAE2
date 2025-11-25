@@ -2,19 +2,16 @@ package com.ThaumiumAE2.ThaumiumAE2.implementation.gui;
 
 import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
 import com.cleanroommc.modularui.api.widget.Interactable;
+import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.screen.RichTooltip;
 import com.cleanroommc.modularui.screen.viewport.ModularGuiContext;
 import com.cleanroommc.modularui.theme.WidgetThemeEntry;
 import com.cleanroommc.modularui.utils.GlStateManager;
-import com.cleanroommc.modularui.value.sync.FluidSlotSyncHandler;
 import com.cleanroommc.modularui.value.sync.SyncHandler;
 import com.cleanroommc.modularui.widget.Widget;
-import com.cleanroommc.modularui.widgets.slot.FluidSlot;
-import org.lwjgl.opengl.GL11;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.client.lib.UtilsFX;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 //todo:
@@ -53,6 +50,7 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
         isEmpty = true;
         return this;
     }
+
     public EssentiaSlot value(EssentiaStack newValue) {
         isEmpty = false;
         this.syncHandler.setValue(newValue);
@@ -67,24 +65,43 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
     }
 
     private void drawAspect(EssentiaStack stack, int z) {
-        if (stack == null ) return;
+        if (stack == null) return;
         UtilsFX.drawTag(1, 1, stack.getAspect(), stack.getStackSize(), 0, z, 771, 1.f, false);
     }
 
+    private void drawEmptySlot() {
+//        GuiDraw.drawRect(
+//            0,
+//            getArea().y,
+//            18,
+//            18,
+//            0xFF4287f5 // Gray color
+//        );
+
+        // Draw border
+        GuiDraw.drawBorder(
+            0,
+            0,
+            18,
+            18,
+            0xFFFFFFFF, // Dark border
+            1
+        );
+    }
 
     @Override
     public void draw(ModularGuiContext context, WidgetThemeEntry<?> widgetTheme) {
-        if (this.syncHandler.getValue() == null){
+        if (this.syncHandler.getValue() == null) {
             isEmpty = true;
         }
-
         EssentiaStack stack = this.syncHandler.getValue();
 
-        if (stack != null && stack.getAspect() != null) {
+        if (stack != null && stack.getAspect() != null && !isEmpty) {
 
+            drawEmptySlot();
             GlStateManager.enableTexture2D();
-
             drawAspect(stack, context.getCurrentDrawingZ());
+//            GlStateManager.disableTexture2D();
         }
 
 

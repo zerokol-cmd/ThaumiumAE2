@@ -1,11 +1,8 @@
 package com.ThaumiumAE2.api;
 
-import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
-import thaumcraft.api.aspects.Aspect;
 import appeng.api.networking.security.BaseActionSource;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-
-import java.util.List;
 
 
 // hate that interface? go tell that to AE2 devs with their shitty thing

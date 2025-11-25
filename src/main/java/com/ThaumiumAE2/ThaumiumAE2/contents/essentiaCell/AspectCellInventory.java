@@ -1,13 +1,5 @@
 package com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell;
 
-import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-import com.ThaumiumAE2.api.ITAE2EssentiaStack;
-import com.ThaumiumAE2.api.IAspectInventory;
-
 import appeng.api.config.AccessRestriction;
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.BaseActionSource;
@@ -15,11 +7,14 @@ import appeng.api.storage.ICellCacheRegistry;
 import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.ISaveProvider;
 import appeng.api.storage.StorageChannel;
+import com.ThaumiumAE2.ThaumiumAE2.TAE2;
+import com.ThaumiumAE2.api.IAspectInventory;
+import com.ThaumiumAE2.api.ITAE2EssentiaStack;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-
-import java.util.List;
 
 public class AspectCellInventory implements IMEInventoryHandler<ITAE2EssentiaStack>, IAspectInventory, ICellCacheRegistry {
 

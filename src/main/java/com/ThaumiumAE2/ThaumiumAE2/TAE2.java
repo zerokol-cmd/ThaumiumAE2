@@ -1,14 +1,10 @@
 package com.ThaumiumAE2.ThaumiumAE2;
 
+import appeng.api.storage.StorageChannel;
 import com.ThaumiumAE2.ThaumiumAE2.Proxies.CommonProxy;
 import com.ThaumiumAE2.ThaumiumAE2.Registers.GUIFactoriesRegister;
 import com.ThaumiumAE2.ThaumiumAE2.Registers.GridCacheRegister;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.ThaumiumAE2.ThaumiumAE2.Registers.ItemRegister;
-
-import appeng.api.storage.StorageChannel;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;

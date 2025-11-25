@@ -3,12 +3,13 @@ package com.ThaumiumAE2.ThaumiumAE2.implementation;
 import appeng.api.storage.ICellContainer;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
 import com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell.AspectCellInventory;
-import com.ThaumiumAE2.api.IEssentiaNetwork;
 import com.ThaumiumAE2.api.IAspectInventory;
+import com.ThaumiumAE2.api.IEssentiaNetwork;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EssentiaNetwork implements IEssentiaNetwork {
     Collection<ICellContainer> cellContainers = new ArrayList<>();
@@ -136,17 +137,23 @@ public class EssentiaNetwork implements IEssentiaNetwork {
 
     @Override
     public List<EssentiaStack> getStoredEssentia() {
-        List<EssentiaStack> result = new ArrayList<>();
+        Map<Aspect, Long> aspectTotals = new HashMap<>();
+
         for (var provider : cellContainers) {
             var cells = provider.getCellArray(TAE2.ESSENTIA_STORAGE);
             for (var cell : cells) {
                 if (cell instanceof IAspectInventory inv) {
                     List<EssentiaStack> storedEssentia = aspectListToEssentiaStackList(inv.getStoredEssentia());
-                    result.addAll(storedEssentia);
+                    for (EssentiaStack stack : storedEssentia) {
+                        aspectTotals.merge(stack.getAspect(), stack.getStackSize(), Long::sum);
+                    }
                 }
             }
         }
-        return result;
+
+        return aspectTotals.entrySet().stream()
+            .map(entry -> new EssentiaStack(entry.getKey(), entry.getValue()))
+            .collect(Collectors.toList());
     }
 
     public void addProvider(ICellContainer provider) {

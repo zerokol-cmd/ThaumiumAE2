@@ -1,16 +1,12 @@
 package com.ThaumiumAE2.ThaumiumAE2.implementation;
 
-import appeng.api.networking.*;
-import appeng.api.networking.events.MENetworkEventSubscribe;
-import appeng.api.networking.events.MENetworkPostCacheConstruction;
+import appeng.api.networking.IGrid;
+import appeng.api.networking.IGridHost;
+import appeng.api.networking.IGridNode;
+import appeng.api.networking.IGridStorage;
 import appeng.api.storage.ICellContainer;
 import appeng.tile.storage.TileDrive;
-import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-import com.ThaumiumAE2.ThaumiumAE2.contents.terminals.GUIEssentiaTerminal;
 import com.ThaumiumAE2.api.IEssentiaGridCache;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class EssentiaGridCache implements IEssentiaGridCache {
     /**

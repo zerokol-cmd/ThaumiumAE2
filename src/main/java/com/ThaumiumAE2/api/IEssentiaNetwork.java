@@ -3,7 +3,6 @@ package com.ThaumiumAE2.api;
 import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
 import thaumcraft.api.aspects.Aspect;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**

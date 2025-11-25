@@ -1,8 +1,6 @@
 package com.ThaumiumAE2.ThaumiumAE2.Proxies;
 
 import com.ThaumiumAE2.ThaumiumAE2.Config;
-import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-import com.ThaumiumAE2.ThaumiumAE2.Tags;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;

@@ -1,8 +1,8 @@
 package com.ThaumiumAE2.ThaumiumAE2;
 
-import java.io.File;
-
 import net.minecraftforge.common.config.Configuration;
+
+import java.io.File;
 
 public class Config {
 

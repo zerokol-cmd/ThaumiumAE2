@@ -1,16 +1,16 @@
 package com.ThaumiumAE2.ThaumiumAE2.implementation;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.IIcon;
+import com.ThaumiumAE2.ThaumiumAE2.TAE2;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import com.ThaumiumAE2.ThaumiumAE2.TAE2;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Global texture manager for all ThaumiumAE2 textures.

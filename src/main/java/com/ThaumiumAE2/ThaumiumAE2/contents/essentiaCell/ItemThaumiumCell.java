@@ -1,15 +1,13 @@
 package com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell;
 
+import appeng.api.AEApi;
+import appeng.api.implementations.tiles.IChestOrDrive;
+import appeng.api.storage.*;
+import com.ThaumiumAE2.ThaumiumAE2.TAE2;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-
-import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-
-import appeng.api.AEApi;
-import appeng.api.implementations.tiles.IChestOrDrive;
-import appeng.api.storage.*;
 
 public class ItemThaumiumCell extends Item implements ICellHandler {
 

@@ -1,10 +1,8 @@
 package com.ThaumiumAE2.ThaumiumAE2.Mixins;
 
-import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-import com.ThaumiumAE2.api.ITAE2EssentiaStack;
-
 import appeng.api.storage.StorageChannel;
 import appeng.api.storage.data.IAEStack;
+import com.ThaumiumAE2.api.ITAE2EssentiaStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
