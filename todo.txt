@@ -1,14 +1,18 @@
 priorities:
-1.  Rewrite essentia sync manager.
+1. proper gui positioning
 
 2 implement terminal view only
-	2.1 implement IStorageSystem for EssentiaStack or find a way around
 	2.2 implement easy to use terminal for getting and putting essentia
-3 export + import bus
-	3.1
+
+3 buses
+	3.1 import bus
+	3.2 export bus
+	3.3 export bus
+4. profile terminal open. why it's so slow?
 
 backlog:
 ✅ 1 implement cell done??
+✅ 2.  Rewrite essentia sync manager.
 
 
 

@@ -7,8 +7,17 @@ import com.cleanroommc.modularui.screen.RichTooltip;
 import com.cleanroommc.modularui.screen.viewport.ModularGuiContext;
 import com.cleanroommc.modularui.theme.WidgetThemeEntry;
 import com.cleanroommc.modularui.utils.GlStateManager;
+import com.cleanroommc.modularui.utils.MouseData;
+import com.cleanroommc.modularui.utils.Platform;
+import com.cleanroommc.modularui.value.sync.FluidSlotSyncHandler;
 import com.cleanroommc.modularui.value.sync.SyncHandler;
 import com.cleanroommc.modularui.widget.Widget;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.client.lib.UtilsFX;
 
@@ -39,7 +48,6 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
     }
 
     public EssentiaSlot syncHandler(EssentiaSlotSyncHandler syncHandler) {
-
         this.isEmpty = true;
         setSyncHandler(syncHandler);
         this.syncHandler = syncHandler;
@@ -69,24 +77,75 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
         UtilsFX.drawTag(1, 1, stack.getAspect(), stack.getStackSize(), 0, z, 771, 1.f, false);
     }
 
-    private void drawEmptySlot() {
-//        GuiDraw.drawRect(
-//            0,
-//            getArea().y,
-//            18,
-//            18,
-//            0xFF4287f5 // Gray color
-//        );
+    @Override
+    public @NotNull Result onMousePressed(int mouseButton) {
+        if (!this.syncHandler.canFill() && !this.syncHandler.canDrain()) {
+            return Result.ACCEPT;
+        }
+        ItemStack cursorStack = Platform.getClientPlayer().inventory.getItemStack();
+        if (cursorStack != null) {
+            MouseData mouseData = MouseData.create(mouseButton);
+            if(this.syncHandler.isValid()) {
+                this.syncHandler.syncToServer(EssentiaSlotSyncHandler.SYNC_CLICK, mouseData::writeToPacket);
+            }else{
+                return Result.ACCEPT;
+            }
+        }
+        return Result.SUCCESS;
+    }
 
-        // Draw border
-        GuiDraw.drawBorder(
-            0,
-            0,
-            18,
-            18,
-            0xFFFFFFFF, // Dark border
-            1
-        );
+    private void drawEmptySlot() {
+        Tessellator tessellator = Tessellator.instance;
+
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        GL11.glColor4f(0.25f, 0.25f, 0.25f, 0.8f);
+
+        int x = 0;
+        int y = 0;
+        int width = 16;
+        int height = 16;
+        int borderWidth = 1;
+
+        tessellator.startDrawingQuads();
+
+        tessellator.addVertex(x, y + borderWidth, 0);
+        tessellator.addVertex(x + width, y + borderWidth, 0);
+        tessellator.addVertex(x + width, y, 0);
+        tessellator.addVertex(x, y, 0);
+
+        tessellator.addVertex(x, y + height, 0);
+        tessellator.addVertex(x + width, y + height, 0);
+        tessellator.addVertex(x + width, y + height - borderWidth, 0);
+        tessellator.addVertex(x, y + height - borderWidth, 0);
+
+        tessellator.addVertex(x, y + height, 0);
+        tessellator.addVertex(x + borderWidth, y + height, 0);
+        tessellator.addVertex(x + borderWidth, y, 0);
+        tessellator.addVertex(x, y, 0);
+
+        tessellator.addVertex(x + width - borderWidth, y + height, 0);
+        tessellator.addVertex(x + width, y + height, 0);
+        tessellator.addVertex(x + width, y, 0);
+        tessellator.addVertex(x + width - borderWidth, y, 0);
+
+        tessellator.draw();
+
+        // Optional: Draw darker background inside the slot
+        GL11.glColor4f(0.15f, 0.15f, 0.15f, 0.5f);
+
+        tessellator.startDrawingQuads();
+        tessellator.addVertex(x + borderWidth, y + height - borderWidth, 0);
+        tessellator.addVertex(x + width - borderWidth, y + height - borderWidth, 0);
+        tessellator.addVertex(x + width - borderWidth, y + borderWidth, 0);
+        tessellator.addVertex(x + borderWidth, y + borderWidth, 0);
+        tessellator.draw();
+
+        // Re-enable textures and reset color
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override

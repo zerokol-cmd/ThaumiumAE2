@@ -2,7 +2,9 @@ package com.ThaumiumAE2.ThaumiumAE2.implementation.gui;
 
 import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
 import com.cleanroommc.modularui.network.NetworkUtils;
+import com.cleanroommc.modularui.utils.MouseData;
 import com.cleanroommc.modularui.value.sync.ValueSyncHandler;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
@@ -17,7 +19,12 @@ public class EssentiaSlotSyncHandler extends ValueSyncHandler<EssentiaStack> {
     @Nullable
     private EssentiaStack cache = null;
 
-    Supplier<EssentiaStack> getter;
+    public static final int SYNC_CLICK = 1;
+    boolean canDrain = true;
+    boolean canFill = true;
+
+    Supplier<EssentiaStack> getter = null;
+
     public EssentiaSlotSyncHandler(Supplier<EssentiaStack> clientGetter, Supplier<EssentiaStack> serverGetter) {
         if (clientGetter == null && serverGetter == null) {
             throw new NullPointerException("Client or server getter must not be null!");
@@ -28,6 +35,26 @@ public class EssentiaSlotSyncHandler extends ValueSyncHandler<EssentiaStack> {
             this.getter = serverGetter != null ? serverGetter : clientGetter;
         }
         this.cache = this.getter.get();
+    }
+
+    public boolean canFill() {
+        return canFill;
+    }
+
+
+    public boolean canDrain() {
+        return canDrain;
+    }
+
+    @Override
+    public void readOnServer(int id, PacketBuffer buf) {
+        if (id == SYNC_CLICK) {
+            tryClickContainer(MouseData.readPacket(buf));
+        }
+    }
+
+    private void tryClickContainer(MouseData mouseData) {
+
     }
 
     public EssentiaSlotSyncHandler() {
@@ -50,12 +77,12 @@ public class EssentiaSlotSyncHandler extends ValueSyncHandler<EssentiaStack> {
 
     @Override
     public boolean updateCacheFromSource(boolean isFirstSync) {
+        if(getter == null) return false;
         if (isFirstSync) {
             setValue(new EssentiaStack(Aspect.AIR, 1));
         }
         EssentiaStack stack = this.getter.get();
-        if(stack != cache)
-        {
+        if (stack != cache) {
             this.cache = stack;
             return true;
         }

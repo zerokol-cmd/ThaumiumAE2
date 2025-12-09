@@ -2,6 +2,7 @@ package com.ThaumiumAE2.ThaumiumAE2.implementation.gui;
 
 import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
 import com.cleanroommc.modularui.api.widget.Interactable;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widget.ParentWidget;
 import com.cleanroommc.modularui.widget.scroll.VerticalScrollData;
 import com.cleanroommc.modularui.widgets.layout.Grid;
@@ -13,38 +14,29 @@ public class EssentiaGridWidget extends ParentWidget<EssentiaGridWidget> impleme
 
     private EssentiaGridWidgetSyncHandler syncHandler;
     private Grid grid;
-    private int initialSlots;
+    private final int initialSlots;
 
-    public EssentiaGridWidget(int columns, int rows) {
-        this.initialSlots = columns * columns;
+    public EssentiaGridWidget(PanelSyncManager syncManager, int columns, int rows) {
+        this.initialSlots = columns * rows;
         this.grid = new Grid();
-//        this.grid.matrix()
+
         VerticalScrollData scrollData = new VerticalScrollData();
         scrollData.setCancelScrollEdge(true);
         grid.scrollable(scrollData);
-        width(columns*18);
+
         heightRel(0.5f);
-//        this.grid.sizeRel(1);
-//        this.grid.size(18 * columns, 18 * rows );//crutch
-//        this.size(18 * columns, 18 * rows );//TODO: *8 is a crotch  crutch
+        this.grid.width(columns * 18 + 10);
 
-        this.grid.width(columns*18+10);
-
-        this.grid.heightRel( 1.F);
+        this.grid.heightRel(1.F);
         List<EssentiaSlot> rowSlots = new ArrayList<>();
         for (int i = 0; i < initialSlots; i++) {
             rowSlots.add(new EssentiaSlot());
+            syncManager.syncValue("essentia_grid_widget_slot", rowSlots.get(i).syncHandler);
         }
         this.grid.mapTo(columns, rowSlots);
-        this.grid.pos(0,0);
-//        this.grid.scrollable();
+        this.grid.pos(0, 0);
         this.grid.horizontalCenter();
-//        sizeRel(1); this.grid.sizeRel(1);
-//        this.grid.size(18 * columns, 18 * rows);
-//        this.size(18 * columns, 18 * rows);
 
-
-        // Add grid to this widget
         this.child(grid);
     }
 
