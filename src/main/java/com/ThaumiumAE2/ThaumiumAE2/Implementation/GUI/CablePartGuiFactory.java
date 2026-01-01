@@ -1,7 +1,7 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation.gui;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation.GUI;
 
 import appeng.tile.networking.TileCableBus;
-import com.ThaumiumAE2.ThaumiumAE2.contents.terminals.PartEssentiaTerminal;
+import com.ThaumiumAE2.ThaumiumAE2.Content.Terminals.PartEssentiaTerminal;
 import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.factory.AbstractUIFactory;
 import com.cleanroommc.modularui.factory.GuiManager;

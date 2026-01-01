@@ -1,4 +1,25 @@
 priorities:
+void jar transforms into regular jar on output
+Essentia put on empty slots
+Dump all button
+Item frames
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 1. proper gui positioning
 
 2 implement terminal view only

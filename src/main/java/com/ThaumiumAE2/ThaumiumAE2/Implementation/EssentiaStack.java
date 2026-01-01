@@ -1,11 +1,11 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation;
 
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.storage.StorageChannel;
 import appeng.api.storage.data.IAETagCompound;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-import com.ThaumiumAE2.api.ITAE2EssentiaStack;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.ITAE2EssentiaStack;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.NotNull;
@@ -202,15 +202,14 @@ public class EssentiaStack implements ITAE2EssentiaStack, Comparable<EssentiaSta
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        EssentiaStack that = (EssentiaStack) obj;
-        // Standard AE2 stack equality ignores stack size
-        return Objects.equals(aspect, that.aspect);
+        if (!(obj instanceof EssentiaStack other)) return false;
+        return this.getAspect().equals(other.getAspect()) &&
+            this.getStackSize() == other.getStackSize();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(aspect);
+        return Objects.hash(getAspect(), getStackSize());
     }
 
 }

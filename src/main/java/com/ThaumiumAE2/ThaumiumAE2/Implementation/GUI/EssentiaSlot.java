@@ -1,6 +1,6 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation.gui;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation.GUI;
 
-import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.EssentiaStack;
 import com.cleanroommc.modularui.api.widget.Interactable;
 import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.screen.RichTooltip;
@@ -9,13 +9,10 @@ import com.cleanroommc.modularui.theme.WidgetThemeEntry;
 import com.cleanroommc.modularui.utils.GlStateManager;
 import com.cleanroommc.modularui.utils.MouseData;
 import com.cleanroommc.modularui.utils.Platform;
-import com.cleanroommc.modularui.value.sync.FluidSlotSyncHandler;
 import com.cleanroommc.modularui.value.sync.SyncHandler;
 import com.cleanroommc.modularui.widget.Widget;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 import thaumcraft.api.aspects.Aspect;
@@ -157,13 +154,15 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
 
         if (stack != null && stack.getAspect() != null && !isEmpty) {
 
-            drawEmptySlot();
+//            drawEmptySlot();
             GlStateManager.enableTexture2D();
             drawAspect(stack, context.getCurrentDrawingZ());
-//            GlStateManager.disableTexture2D();
         }
+    }
 
-
+    @Override
+    public void drawOverlay(ModularGuiContext context, WidgetThemeEntry<?> widgetTheme) {
+        super.drawOverlay(context, widgetTheme);
     }
 
 }

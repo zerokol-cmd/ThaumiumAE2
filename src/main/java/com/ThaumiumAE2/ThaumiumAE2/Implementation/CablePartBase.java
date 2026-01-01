@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation;
 
 import appeng.api.AEApi;
 import appeng.api.config.SecurityPermissions;

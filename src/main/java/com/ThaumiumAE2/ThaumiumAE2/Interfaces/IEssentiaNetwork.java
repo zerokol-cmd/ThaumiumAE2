@@ -1,6 +1,6 @@
-package com.ThaumiumAE2.api;
+package com.ThaumiumAE2.ThaumiumAE2.Interfaces;
 
-import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.EssentiaStack;
 import thaumcraft.api.aspects.Aspect;
 
 import java.util.List;

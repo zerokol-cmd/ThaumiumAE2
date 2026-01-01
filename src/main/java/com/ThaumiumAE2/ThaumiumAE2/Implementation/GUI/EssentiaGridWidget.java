@@ -1,17 +1,18 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation.gui;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation.GUI;
 
-import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.EssentiaStack;
 import com.cleanroommc.modularui.api.widget.Interactable;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.value.sync.SyncHandler;
 import com.cleanroommc.modularui.widget.ParentWidget;
 import com.cleanroommc.modularui.widget.scroll.VerticalScrollData;
 import com.cleanroommc.modularui.widgets.layout.Grid;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EssentiaGridWidget extends ParentWidget<EssentiaGridWidget> implements Interactable {
-
     private EssentiaGridWidgetSyncHandler syncHandler;
     private Grid grid;
     private final int initialSlots;
@@ -20,7 +21,7 @@ public class EssentiaGridWidget extends ParentWidget<EssentiaGridWidget> impleme
         this.initialSlots = columns * rows;
         this.grid = new Grid();
 
-        VerticalScrollData scrollData = new VerticalScrollData();
+        CustomVerticalScrollData scrollData = new CustomVerticalScrollData();
         scrollData.setCancelScrollEdge(true);
         grid.scrollable(scrollData);
 
@@ -30,7 +31,7 @@ public class EssentiaGridWidget extends ParentWidget<EssentiaGridWidget> impleme
         this.grid.heightRel(1.F);
         List<EssentiaSlot> rowSlots = new ArrayList<>();
         for (int i = 0; i < initialSlots; i++) {
-            rowSlots.add(new EssentiaSlot());
+            rowSlots.add(new EssentiaGridSlot(this, i));
             syncManager.syncValue("essentia_grid_widget_slot", rowSlots.get(i).syncHandler);
         }
         this.grid.mapTo(columns, rowSlots);
@@ -41,8 +42,17 @@ public class EssentiaGridWidget extends ParentWidget<EssentiaGridWidget> impleme
     }
 
     /**
+     * @return
+     */
+    @Override
+    public @NotNull SyncHandler getSyncHandler() {
+        return this.syncHandler;
+    }
+
+    /**
      * Attach sync handler and set up update callback
      */
+
     public EssentiaGridWidget syncHandler(EssentiaGridWidgetSyncHandler handler) {
         this.syncHandler = handler;
         handler.setUpdateCallback(this::updateGrid);
@@ -95,6 +105,10 @@ public class EssentiaGridWidget extends ParentWidget<EssentiaGridWidget> impleme
                 slot.makeEmpty();
             }
         });
+    }
+
+    public EssentiaSlot getSlotById(int id) {
+        return (EssentiaSlot) grid.getChildren().get(id);
     }
 
     /**

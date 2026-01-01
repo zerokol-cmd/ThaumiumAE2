@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation;
 
 import appeng.api.networking.*;
 import appeng.api.networking.energy.IEnergyGrid;
@@ -9,8 +9,8 @@ import appeng.api.storage.IMEMonitor;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.AEColor;
 import appeng.api.util.DimensionalCoord;
-import com.ThaumiumAE2.api.IEssentiaGridCache;
-import com.ThaumiumAE2.api.IEssentiaNetwork;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.IEssentiaGridCache;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.IEssentiaNetwork;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 

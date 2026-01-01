@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.api;
+package com.ThaumiumAE2.ThaumiumAE2.Interfaces;
 
 import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.factory.GuiData;

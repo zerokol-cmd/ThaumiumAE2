@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation;
 
 import appeng.api.networking.IGrid;
 import appeng.api.networking.IGridHost;
@@ -6,7 +6,7 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.IGridStorage;
 import appeng.api.storage.ICellContainer;
 import appeng.tile.storage.TileDrive;
-import com.ThaumiumAE2.api.IEssentiaGridCache;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.IEssentiaGridCache;
 
 public class EssentiaGridCache implements IEssentiaGridCache {
     /**

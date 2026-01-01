@@ -1,10 +1,9 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation.gui;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation.GUI;
 
-import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaStack;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.EssentiaStack;
 import com.cleanroommc.modularui.network.NetworkUtils;
 import com.cleanroommc.modularui.utils.MouseData;
 import com.cleanroommc.modularui.value.sync.ValueSyncHandler;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.util.function.Supplier;
 
 public class EssentiaSlotSyncHandler extends ValueSyncHandler<EssentiaStack> {
-    // ... (static methods and constants remain the same)
 
 
     @Nullable

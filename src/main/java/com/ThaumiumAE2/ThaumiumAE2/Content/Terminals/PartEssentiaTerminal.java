@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.contents.terminals;
+package com.ThaumiumAE2.ThaumiumAE2.Content.Terminals;
 
 import appeng.api.config.SecurityPermissions;
 import appeng.api.networking.IGridNode;
@@ -10,11 +10,11 @@ import appeng.api.storage.ITerminalHost;
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.util.IConfigManager;
-import com.ThaumiumAE2.ThaumiumAE2.implementation.CablePartBase;
-import com.ThaumiumAE2.ThaumiumAE2.implementation.GridBlock;
-import com.ThaumiumAE2.ThaumiumAE2.implementation.TextureManager;
-import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.CablePartGuiFactory;
-import com.ThaumiumAE2.api.IGuiHolderProvider;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.CablePartBase;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.GridBlock;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.TextureManager;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.GUI.CablePartGuiFactory;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.IGuiHolderProvider;
 import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.factory.SidedPosGuiData;
 import net.minecraft.client.renderer.RenderBlocks;

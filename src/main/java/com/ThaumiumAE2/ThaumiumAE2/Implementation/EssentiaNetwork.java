@@ -1,10 +1,10 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation;
 
 import appeng.api.storage.ICellContainer;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-import com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell.AspectCellInventory;
-import com.ThaumiumAE2.api.IAspectInventory;
-import com.ThaumiumAE2.api.IEssentiaNetwork;
+import com.ThaumiumAE2.ThaumiumAE2.Content.EssentiaCell.AspectCellInventory;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.IAspectInventory;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.IEssentiaNetwork;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 

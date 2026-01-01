@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.api;
+package com.ThaumiumAE2.ThaumiumAE2.Interfaces;
 
 import appeng.api.networking.security.BaseActionSource;
 import thaumcraft.api.aspects.Aspect;

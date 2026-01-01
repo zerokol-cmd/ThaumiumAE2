@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.api;
+package com.ThaumiumAE2.ThaumiumAE2.Interfaces;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.IGridCache;

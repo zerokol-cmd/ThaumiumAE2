@@ -1,8 +1,8 @@
 package com.ThaumiumAE2.ThaumiumAE2.Registers;
 
 import appeng.api.AEApi;
-import com.ThaumiumAE2.ThaumiumAE2.implementation.EssentiaGridCache;
-import com.ThaumiumAE2.api.IEssentiaGridCache;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.EssentiaGridCache;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.IEssentiaGridCache;
 
 public class GridCacheRegister {
     public static void register(){

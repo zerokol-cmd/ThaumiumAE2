@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell;
+package com.ThaumiumAE2.ThaumiumAE2.Content.EssentiaCell;
 
 import appeng.api.AEApi;
 import appeng.api.implementations.tiles.IChestOrDrive;

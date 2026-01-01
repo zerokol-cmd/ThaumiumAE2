@@ -1,0 +1,6 @@
+{
+  "essentia_terminal": "thaumiumae2:essentia_terminal",
+  "screens": {
+    "ThaumiumAE2:gui_essentia_terminal": "essentia_terminal"
+  }
+}

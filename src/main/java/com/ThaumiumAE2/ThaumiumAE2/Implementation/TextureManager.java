@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.implementation;
+package com.ThaumiumAE2.ThaumiumAE2.Implementation;
 
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

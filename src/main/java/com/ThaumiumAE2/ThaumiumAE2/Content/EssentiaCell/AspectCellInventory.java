@@ -1,4 +1,4 @@
-package com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell;
+package com.ThaumiumAE2.ThaumiumAE2.Content.EssentiaCell;
 
 import appeng.api.config.AccessRestriction;
 import appeng.api.config.Actionable;
@@ -8,8 +8,8 @@ import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.ISaveProvider;
 import appeng.api.storage.StorageChannel;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-import com.ThaumiumAE2.api.IAspectInventory;
-import com.ThaumiumAE2.api.ITAE2EssentiaStack;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.IAspectInventory;
+import com.ThaumiumAE2.ThaumiumAE2.Interfaces.ITAE2EssentiaStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.NotNull;

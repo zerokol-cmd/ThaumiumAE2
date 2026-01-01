@@ -1,6 +1,6 @@
 package com.ThaumiumAE2.ThaumiumAE2.Registers;
 
-import com.ThaumiumAE2.ThaumiumAE2.implementation.gui.CablePartGuiFactory;
+import com.ThaumiumAE2.ThaumiumAE2.Implementation.GUI.CablePartGuiFactory;
 import com.cleanroommc.modularui.factory.GuiManager;
 
 public class GUIFactoriesRegister {

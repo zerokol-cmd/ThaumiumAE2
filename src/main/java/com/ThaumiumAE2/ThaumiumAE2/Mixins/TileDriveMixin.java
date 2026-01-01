@@ -8,7 +8,7 @@ import appeng.me.storage.MEInventoryHandler;
 import appeng.tile.inventory.AppEngInternalInventory;
 import appeng.tile.storage.TileDrive;
 import com.ThaumiumAE2.ThaumiumAE2.TAE2;
-import com.ThaumiumAE2.ThaumiumAE2.contents.essentiaCell.AspectCellInventory;
+import com.ThaumiumAE2.ThaumiumAE2.Content.EssentiaCell.AspectCellInventory;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
