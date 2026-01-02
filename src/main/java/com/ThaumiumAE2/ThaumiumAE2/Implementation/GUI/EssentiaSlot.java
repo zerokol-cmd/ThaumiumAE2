@@ -72,6 +72,13 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
     private void drawAspect(EssentiaStack stack, int z) {
         if (stack == null) return;
         UtilsFX.drawTag(1, 1, stack.getAspect(), stack.getStackSize(), 0, z, 771, 1.f, false);
+        GL11.glDisable(3042); // Disables GL_BLEND
+
+        GL11.glBlendFunc(770, 771);
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glAlphaFunc(516, 0.1F);
+        GL11.glEnable(2896);
     }
 
     @Override
@@ -96,9 +103,9 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        GL11.glColor4f(0.25f, 0.25f, 0.25f, 0.8f);
+//        GL11.glColor4f(0.25f, 0.25f, 0.25f, 0.8f);
 
         int x = 0;
         int y = 0;
@@ -156,13 +163,18 @@ public class EssentiaSlot extends Widget<EssentiaSlot> implements Interactable {
 
 //            drawEmptySlot();
             GlStateManager.enableTexture2D();
+            GlStateManager.enableLighting();
             drawAspect(stack, context.getCurrentDrawingZ());
+            GlStateManager.disableLighting();
+//            GlStateManager.disableColorLogic();
+//            GlStateManager.disableAlpha();
+
         }
     }
 
     @Override
     public void drawOverlay(ModularGuiContext context, WidgetThemeEntry<?> widgetTheme) {
-        super.drawOverlay(context, widgetTheme);
+//        super.drawOverlay(context, widgetTheme);
     }
 
 }

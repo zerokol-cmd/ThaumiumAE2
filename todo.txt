@@ -1,5 +1,5 @@
 priorities:
-void jar transforms into regular jar on output
+void jar  and brain jar transforms into regular jar on output
 Essentia put on empty slots
 Dump all button
 Item frames

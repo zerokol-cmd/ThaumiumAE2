@@ -1,12 +1,20 @@
 package com.ThaumiumAE2.ThaumiumAE2.Implementation.GUI;
 
 import com.ThaumiumAE2.ThaumiumAE2.Implementation.EssentiaStack;
+import com.ThaumiumAE2.ThaumiumAE2.TAE2;
+import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.widget.Interactable;
+import com.cleanroommc.modularui.drawable.ColorType;
+import com.cleanroommc.modularui.drawable.UITexture;
+import com.cleanroommc.modularui.utils.Color;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.value.sync.SyncHandler;
 import com.cleanroommc.modularui.widget.ParentWidget;
 import com.cleanroommc.modularui.widget.scroll.VerticalScrollData;
 import com.cleanroommc.modularui.widgets.layout.Grid;
+import com.cleanroommc.modularui.widgets.slot.FluidSlot;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidTank;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -21,8 +29,11 @@ public class EssentiaGridWidget extends ParentWidget<EssentiaGridWidget> impleme
         this.initialSlots = columns * rows;
         this.grid = new Grid();
 
-        CustomVerticalScrollData scrollData = new CustomVerticalScrollData();
+        CustomVerticalScrollData scrollData = new CustomVerticalScrollData(false, 9);
         scrollData.setCancelScrollEdge(true);
+        scrollData.setScrollSize(1);
+        scrollData.texture(new UITexture(new ResourceLocation("thaumiumae2", "textures/gui/scroll.png"), 0, 0, 1, 1, null, true));
+
         grid.scrollable(scrollData);
 
         heightRel(0.5f);
